@@ -19,6 +19,8 @@ namespace TetrisGame
         private ITetrisShape _currentShape = null;
         private Random _random = new Random();
         private bool _gameOver = false;
+        private ShapeDirections _currentDirection = ShapeDirections.FaceDown;
+        private TetrisShapes _currentShapeModel = TetrisShapes.TShape;
 
         public Form1()
         {
@@ -152,8 +154,11 @@ namespace TetrisGame
         {
             ITetrisShape shape = null;
 
-            //Create a random direction
-            ShapeDirections direction = (ShapeDirections)_random.Next(1, 4);
+            if (forPreview)
+            {
+                //Create a random direction
+                _currentDirection = (ShapeDirections)_random.Next(1, 4);
+            }
 
             //Init location
             int colIdx = 1;
@@ -164,13 +169,16 @@ namespace TetrisGame
                 colIdx = _random.Next(2, Constants.MAX_WIDTH - 2);
             }
 
-            //Create a random shape
-            TetrisShapes model = (TetrisShapes)_random.Next(1, 2);
+            if (forPreview)
+            {
+                //Create a random shape
+                _currentShapeModel = (TetrisShapes)_random.Next(1, 2);
+            }
 
-            switch (model)
+            switch (_currentShapeModel)
             {
                 case TetrisShapes.TShape:
-                    shape = new TShape(forPreview ? sheetPreview : sheetMain, rowIdx, colIdx, direction);
+                    shape = new TShape(forPreview ? sheetPreview : sheetMain, rowIdx, colIdx, _currentDirection);
                     break;
 
                 case TetrisShapes.SShape:
@@ -178,7 +186,7 @@ namespace TetrisGame
                     break;
 
                 case TetrisShapes.LShape:
-                    shape = new LShape(forPreview ? sheetPreview : sheetMain, rowIdx, colIdx, direction);
+                    shape = new LShape(forPreview ? sheetPreview : sheetMain, rowIdx, colIdx, _currentDirection);
                     break;
             }
 
@@ -197,8 +205,7 @@ namespace TetrisGame
                 //Shape can't be moved down, check for cleared rows
                 CheckRows();
                 //Assign pending shape to current shape
-                _currentShape = _pendingShape;
-                _currentShape.SetSheetView(sheetMain);
+                _currentShape = GenerateRandomShape(false);
 
                 //Create new pending shape
                 _pendingShape.Reset();

@@ -17,21 +17,21 @@ namespace TetrisGame.Shape
         /// <summary>
         /// The four cells that represents a shape
         /// </summary>
-        private Cell _center = null;
-        private int _centerRowIdx = 0;
-        private int _centerColIdx = 0;
+        //private Cell _center = null;
+        //private int _centerRowIdx = 0;
+        //private int _centerColIdx = 0;
 
-        private Cell _left = null;
-        private int _leftRowIdx = 0;
-        private int _leftColIdx = 0;
+        //private Cell _left = null;
+        //private int _leftRowIdx = 0;
+        //private int _leftColIdx = 0;
 
-        private Cell _right = null;
-        private int _rightRowIdx = 0;
-        private int _rightColIdx = 0;
+        //private Cell _right = null;
+        //private int _rightRowIdx = 0;
+        //private int _rightColIdx = 0;
 
-        private Cell _top = null;
-        private int _topRowIdx = 0;
-        private int _topColIdx = 0;
+        //private Cell _top = null;
+        //private int _topRowIdx = 0;
+        //private int _topColIdx = 0;
 
         /// <summary>
         /// The init location of the shape
