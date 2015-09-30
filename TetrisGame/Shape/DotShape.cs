@@ -16,7 +16,7 @@ namespace TetrisGame.Shape
         private SheetView _sheet = null;
 
         /// <summary>
-        /// The four cells that represents a shape
+        /// The one cell that represents a shape
         /// </summary>
         private Cell _center = null;
         private int _centerRowIdx = 0;
@@ -138,9 +138,6 @@ namespace TetrisGame.Shape
             int nextCenterRowIdx = 0;
             int nextCenterColIdx = 0;
 
-            ICellType nextLeftCellType = null;
-            ICellType nextTopCellType = null;
-            ICellType nextRightCellType = null;
             ICellType nextCenterCellType = null;
 
             bool canMove = true;
