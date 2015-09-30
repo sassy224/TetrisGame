@@ -60,7 +60,7 @@
             this.fpSpread1.TabIndex = 0;
             this.fpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
             this.fpSpread1.ButtonClicked += new FarPoint.Win.Spread.EditorNotifyEventHandler(this.fpSpread1_ButtonClicked);
-            this.fpSpread1.ComboSelChange += new FarPoint.Win.Spread.EditorNotifyEventHandler(this.fpSpread1_ComboSelChange);
+            this.fpSpread1.ComboCloseUp += new FarPoint.Win.Spread.EditorNotifyEventHandler(this.fpSpread1_ComboCloseUp);
             // 
             // fpSpread1_Sheet1
             // 
@@ -273,7 +273,7 @@
             this.fpSpread1_Sheet1.Cells.Get(3, 3).CellType = comboBoxCellType1;
             this.fpSpread1_Sheet1.Cells.Get(3, 3).ColumnSpan = 3;
             this.fpSpread1_Sheet1.Cells.Get(3, 3).ForeColor = System.Drawing.Color.Black;
-            this.fpSpread1_Sheet1.Cells.Get(3, 3).Value = "Slow";
+            this.fpSpread1_Sheet1.Cells.Get(3, 3).Value = "Normal";
             this.fpSpread1_Sheet1.Cells.Get(3, 3).VisualStyles = FarPoint.Win.VisualStyles.Off;
             this.fpSpread1_Sheet1.Cells.Get(3, 4).BackColor = System.Drawing.SystemColors.ControlLight;
             this.fpSpread1_Sheet1.Cells.Get(3, 4).ForeColor = System.Drawing.Color.Silver;

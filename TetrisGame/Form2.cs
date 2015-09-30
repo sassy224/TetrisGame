@@ -16,26 +16,65 @@ namespace TetrisGame
 {
     public partial class Form2 : Form
     {
+        /// <summary>
+        /// Variable to hold the shape in the preview section
+        /// </summary>
         private ITetrisShape _pendingShape = null;
+        /// <summary>
+        /// Variable to hold the shape in the game
+        /// </summary>
         private ITetrisShape _currentShape = null;
+        /// <summary>
+        /// A random generator
+        /// </summary>
         private Random _random = new Random();
-        private bool _gameOver = false;
+        /// <summary>
+        /// Flag to check whelther the game is over
+        /// </summary>
+        private bool _isGameOver = false;
+        /// <summary>
+        /// Variable to hold the current shape direction of the shape
+        /// </summary>
         private ShapeDirections _currentDirection = ShapeDirections.FaceDown;
+        /// <summary>
+        /// Variable to hold the current Shape model
+        /// </summary>
         private TetrisShapes _currentShapeModel = TetrisShapes.TShape;
-        PSShape rectGameOver;
-        Cell previewRange = null;
-        Cell gameRange = null;
+        /// <summary>
+        /// Variable to store the rectangle shape object of the spread
+        /// </summary>
+        private PSShape _rectGameOver;
+        /// <summary>
+        /// Variable to store the selection range of the preview section
+        /// </summary>
+        private Cell _previewRange = null;
+        /// <summary>
+        /// Variable to store the selection range of the game section
+        /// </summary>
+        private Cell _gameRange = null;
+        /// <summary>
+        /// Variable to store the current level setting of the game
+        /// </summary>
+        private string _currentLevel;
 
         public Form2()
         {
             InitializeComponent();
-            rectGameOver = fpSpread1_Sheet1.GetShape("rectGameOver");
+            //Save the shape to object and remove it from the spread
+            _rectGameOver = fpSpread1_Sheet1.GetShape("rectGameOver");
             fpSpread1_Sheet1.RemoveShape("rectGameOver");
 
-            previewRange = fpSpread1_Sheet1.Cells[1, 16, 3, 19];
-            gameRange = fpSpread1_Sheet1.Cells[5, 1, Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET, Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET];
+            //Save ranges
+            _previewRange = fpSpread1_Sheet1.Cells[1, 16, 3, 19];
+            _gameRange = fpSpread1_Sheet1.Cells[5, 1, Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET, Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET];
+            _currentLevel = GameLevels.Normal.ToString();
         }
 
+        /// <summary>
+        /// Method that fires when ButtonCellType is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void fpSpread1_ButtonClicked(object sender, FarPoint.Win.Spread.EditorNotifyEventArgs e)
         {
             if (e.Column == 1 && e.Row == 1)
@@ -64,26 +103,6 @@ namespace TetrisGame
             }
         }
 
-        private void fpSpread1_ComboSelChange(object sender, EditorNotifyEventArgs e)
-        {
-            if (e.Row == 3 && e.Column == 3)
-            {
-                string selectedLevel = fpSpread1_Sheet1.Cells[3, 3].Text;
-                if (selectedLevel.Equals(GameLevels.Slow.ToString(), StringComparison.CurrentCultureIgnoreCase))
-                {
-                    tmTick.Interval = (int)GameLevels.Slow;
-                }
-                else if (selectedLevel.Equals(GameLevels.Normal.ToString(), StringComparison.CurrentCultureIgnoreCase))
-                {
-                    tmTick.Interval = (int)GameLevels.Normal;
-                }
-                else
-                {
-                    tmTick.Interval = (int)GameLevels.Fast;
-                }
-            }
-        }
-
         /// <summary>
         /// Reset the board and start the game
         /// </summary>
@@ -95,15 +114,15 @@ namespace TetrisGame
             //Remove shape
             fpSpread1_Sheet1.RemoveShape("rectGameOver");
             //Clear ranges
-            previewRange.ResetCellType();
-            gameRange.ResetCellType();
+            _previewRange.ResetCellType();
+            _gameRange.ResetCellType();
 
             //Create random shapes
             _currentShape = GenerateRandomShape(false);
 
             _pendingShape = GenerateRandomShape(true);
             fpSpread1_Sheet1.Cells[2, 12].Text = "0";
-            _gameOver = false;
+            _isGameOver = false;
 
             //Start ticking
             tmTick.Start();
@@ -115,8 +134,8 @@ namespace TetrisGame
         private void GameOver()
         {
             tmTick.Stop();
-            fpSpread1_Sheet1.AddShape(rectGameOver);
-            _gameOver = true;
+            fpSpread1_Sheet1.AddShape(_rectGameOver);
+            _isGameOver = true;
         }
 
         /// <summary>
@@ -129,8 +148,8 @@ namespace TetrisGame
             //A shape is built by 4 cells, find the lowest row index of the 4 cells
             int minRowIdx = Math.Min(Math.Min(cells[0].Row.Index, cells[1].Row.Index), Math.Min(cells[2].Row.Index, cells[3].Row.Index));
 
-            //check minRowIdx
-            if (minRowIdx == Constants.BASE_HEIGHT_OFFSET) //cells reach top of the border
+            //Check minRowIdx
+            if (minRowIdx <= Constants.BASE_HEIGHT_OFFSET) //cells reach top of the border
             {
                 GameOver();
                 return;
@@ -182,6 +201,11 @@ namespace TetrisGame
             }
         }
 
+        /// <summary>
+        /// Generate a new random shape
+        /// </summary>
+        /// <param name="forPreview">Flag to check whether this shape is generated for preview</param>
+        /// <returns>New instance of ITetrisShape class</returns>
         private ITetrisShape GenerateRandomShape(bool forPreview)
         {
             ITetrisShape shape = null;
@@ -205,7 +229,7 @@ namespace TetrisGame
             if (forPreview)
             {
                 //Create a random shape
-                _currentShapeModel = (TetrisShapes)_random.Next(1, 3);
+                _currentShapeModel = (TetrisShapes)_random.Next(1, 4);
             }
 
             switch (_currentShapeModel)
@@ -218,14 +242,20 @@ namespace TetrisGame
                     shape = new SShape(fpSpread1_Sheet1, rowIdx, colIdx);
                     break;
 
-                case TetrisShapes.LShape:
-                    shape = new LShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
+                case TetrisShapes.DotShape:
+                    shape = new DotShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
                     break;
             }
 
             return shape;
         }
 
+        /// <summary>
+        /// Overwrite method to process arrow key
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             //Capture up arrow key
@@ -237,21 +267,21 @@ namespace TetrisGame
             //Capture down arrow key
             if (keyData == Keys.Down)
             {
-                if (!_gameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Down))
+                if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Down))
                     _currentShape.MoveDown();
                 return true;
             }
             //Capture left arrow key
             if (keyData == Keys.Left)
             {
-                if (!_gameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Left))
+                if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Left))
                     _currentShape.MoveLeft();
                 return true;
             }
             //Capture right arrow key
             if (keyData == Keys.Right)
             {
-                if (!_gameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Right))
+                if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Right))
                     _currentShape.MoveRight();
                 return true;
             }
@@ -259,7 +289,7 @@ namespace TetrisGame
             //Capture Esc key
             if (keyData == Keys.Space)
             {
-                if (!_gameOver)
+                if (!_isGameOver)
                 {
                     if (_currentShape == null)
                     {
@@ -276,6 +306,36 @@ namespace TetrisGame
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        /// <summary>
+        /// Method that fires up when user closes the ComboBoxCellType
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void fpSpread1_ComboCloseUp(object sender, EditorNotifyEventArgs e)
+        {
+            if (e.Row == 3 && e.Column == 3)
+            {
+                //Check if user selected new value
+                string selectedLevel = fpSpread1_Sheet1.Cells[3, 3].Text;
+                if (selectedLevel != _currentLevel)
+                {
+                    if (selectedLevel.Equals(GameLevels.Slow.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tmTick.Interval = (int)GameLevels.Slow;
+                    }
+                    else if (selectedLevel.Equals(GameLevels.Normal.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tmTick.Interval = (int)GameLevels.Normal;
+                    }
+                    else
+                    {
+                        tmTick.Interval = (int)GameLevels.Fast;
+                    }
+                    _currentLevel = selectedLevel;
+                }
+            }
         }
     }
 }

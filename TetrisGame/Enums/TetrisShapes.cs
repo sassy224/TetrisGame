@@ -16,8 +16,8 @@ namespace TetrisGame.Enums
         /// </summary>
         SShape = 2,
         /// <summary>
-        /// The L shape
+        /// The dot "." shape
         /// </summary>
-        LShape = 3
+        DotShape = 3
     }
 }
