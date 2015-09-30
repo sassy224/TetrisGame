@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            FarPoint.Win.Spread.CellType.ButtonCellType buttonCellType1 = new FarPoint.Win.Spread.CellType.ButtonCellType();
-            FarPoint.Win.Spread.CellType.TextCellType textCellType1 = new FarPoint.Win.Spread.CellType.TextCellType();
-            FarPoint.Win.Spread.CellType.TextCellType textCellType2 = new FarPoint.Win.Spread.CellType.TextCellType();
-            FarPoint.Win.Spread.CellType.TextCellType textCellType3 = new FarPoint.Win.Spread.CellType.TextCellType();
-            FarPoint.Win.Spread.CellType.ComboBoxCellType comboBoxCellType1 = new FarPoint.Win.Spread.CellType.ComboBoxCellType();
+            FarPoint.Win.Spread.CellType.ButtonCellType buttonCellType4 = new FarPoint.Win.Spread.CellType.ButtonCellType();
+            FarPoint.Win.Spread.CellType.TextCellType textCellType10 = new FarPoint.Win.Spread.CellType.TextCellType();
+            FarPoint.Win.Spread.CellType.TextCellType textCellType11 = new FarPoint.Win.Spread.CellType.TextCellType();
+            FarPoint.Win.Spread.CellType.TextCellType textCellType12 = new FarPoint.Win.Spread.CellType.TextCellType();
+            FarPoint.Win.Spread.CellType.ComboBoxCellType comboBoxCellType4 = new FarPoint.Win.Spread.CellType.ComboBoxCellType();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
             this.fpSpread1 = new FarPoint.Win.Spread.FpSpread();
             this.fpSpread1_Sheet1 = new FarPoint.Win.Spread.SheetView();
@@ -45,20 +45,33 @@
             // fpSpread1
             // 
             this.fpSpread1.AccessibleDescription = "fpSpread1, Sheet1, Row 0, Column 0, ";
+            this.fpSpread1.AllowUndo = false;
+            this.fpSpread1.AllowUserZoom = false;
+            this.fpSpread1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fpSpread1.AutoClipboard = false;
             this.fpSpread1.BorderCollapse = FarPoint.Win.Spread.BorderCollapse.Collapse;
             this.fpSpread1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.fpSpread1.CellNoteIndicatorVisible = false;
             this.fpSpread1.ColumnSplitBoxPolicy = FarPoint.Win.Spread.SplitBoxPolicy.Never;
+            this.fpSpread1.EnableCrossSheetReference = false;
             this.fpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
             this.fpSpread1.Location = new System.Drawing.Point(0, 0);
             this.fpSpread1.Margin = new System.Windows.Forms.Padding(0);
+            this.fpSpread1.MoveActiveOnFocus = false;
             this.fpSpread1.Name = "fpSpread1";
+            this.fpSpread1.RetainSelectionBlock = false;
             this.fpSpread1.RowSplitBoxPolicy = FarPoint.Win.Spread.SplitBoxPolicy.Never;
+            this.fpSpread1.SelectionBlockOptions = FarPoint.Win.Spread.SelectionBlockOptions.None;
             this.fpSpread1.Sheets.AddRange(new FarPoint.Win.Spread.SheetView[] {
             this.fpSpread1_Sheet1});
             this.fpSpread1.Size = new System.Drawing.Size(399, 499);
             this.fpSpread1.TabIndex = 0;
+            this.fpSpread1.TabStrip.ButtonPolicy = FarPoint.Win.Spread.TabStripButtonPolicy.Never;
             this.fpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
+            this.fpSpread1.CellClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSpread1_CellClick);
+            this.fpSpread1.CellDoubleClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSpread1_CellDoubleClick);
             this.fpSpread1.ButtonClicked += new FarPoint.Win.Spread.EditorNotifyEventHandler(this.fpSpread1_ButtonClicked);
             this.fpSpread1.ComboCloseUp += new FarPoint.Win.Spread.EditorNotifyEventHandler(this.fpSpread1_ComboCloseUp);
             // 
@@ -72,6 +85,8 @@
             fpSpread1_Sheet1.RowCount = 25;
             this.fpSpread1_Sheet1.AllowNoteEdit = false;
             this.fpSpread1_Sheet1.AutoCalculation = false;
+            this.fpSpread1_Sheet1.AutoGenerateColumns = false;
+            this.fpSpread1_Sheet1.AutoUpdateNotes = false;
             this.fpSpread1_Sheet1.Cells.Get(0, 0).BackColor = System.Drawing.SystemColors.ControlLight;
             this.fpSpread1_Sheet1.Cells.Get(0, 0).ForeColor = System.Drawing.Color.Black;
             this.fpSpread1_Sheet1.Cells.Get(0, 0).VisualStyles = FarPoint.Win.VisualStyles.Off;
@@ -136,10 +151,10 @@
             this.fpSpread1_Sheet1.Cells.Get(1, 0).ForeColor = System.Drawing.Color.Silver;
             this.fpSpread1_Sheet1.Cells.Get(1, 0).VisualStyles = FarPoint.Win.VisualStyles.Off;
             this.fpSpread1_Sheet1.Cells.Get(1, 1).BackColor = System.Drawing.SystemColors.ControlLight;
-            buttonCellType1.ButtonColor2 = System.Drawing.SystemColors.ButtonFace;
-            buttonCellType1.HotkeyPrefix = System.Drawing.Text.HotkeyPrefix.Show;
-            buttonCellType1.Text = "&New Game";
-            this.fpSpread1_Sheet1.Cells.Get(1, 1).CellType = buttonCellType1;
+            buttonCellType4.ButtonColor2 = System.Drawing.SystemColors.ButtonFace;
+            buttonCellType4.HotkeyPrefix = System.Drawing.Text.HotkeyPrefix.Show;
+            buttonCellType4.Text = "&New Game";
+            this.fpSpread1_Sheet1.Cells.Get(1, 1).CellType = buttonCellType4;
             this.fpSpread1_Sheet1.Cells.Get(1, 1).ColumnSpan = 3;
             this.fpSpread1_Sheet1.Cells.Get(1, 1).ForeColor = System.Drawing.Color.Silver;
             this.fpSpread1_Sheet1.Cells.Get(1, 1).VisualStyles = FarPoint.Win.VisualStyles.Off;
@@ -219,15 +234,15 @@
             this.fpSpread1_Sheet1.Cells.Get(2, 9).ForeColor = System.Drawing.Color.Silver;
             this.fpSpread1_Sheet1.Cells.Get(2, 9).VisualStyles = FarPoint.Win.VisualStyles.Off;
             this.fpSpread1_Sheet1.Cells.Get(2, 10).BackColor = System.Drawing.SystemColors.ControlLight;
-            textCellType1.ReadOnly = true;
-            this.fpSpread1_Sheet1.Cells.Get(2, 10).CellType = textCellType1;
+            textCellType10.ReadOnly = true;
+            this.fpSpread1_Sheet1.Cells.Get(2, 10).CellType = textCellType10;
             this.fpSpread1_Sheet1.Cells.Get(2, 10).ColumnSpan = 2;
             this.fpSpread1_Sheet1.Cells.Get(2, 10).ForeColor = System.Drawing.Color.Black;
             this.fpSpread1_Sheet1.Cells.Get(2, 10).Value = "Score:";
             this.fpSpread1_Sheet1.Cells.Get(2, 10).VisualStyles = FarPoint.Win.VisualStyles.Off;
             this.fpSpread1_Sheet1.Cells.Get(2, 11).BackColor = System.Drawing.SystemColors.ControlLight;
-            textCellType2.ReadOnly = true;
-            this.fpSpread1_Sheet1.Cells.Get(2, 11).CellType = textCellType2;
+            textCellType11.ReadOnly = true;
+            this.fpSpread1_Sheet1.Cells.Get(2, 11).CellType = textCellType11;
             this.fpSpread1_Sheet1.Cells.Get(2, 11).ForeColor = System.Drawing.Color.Black;
             this.fpSpread1_Sheet1.Cells.Get(2, 11).Value = "Score:";
             this.fpSpread1_Sheet1.Cells.Get(2, 11).VisualStyles = FarPoint.Win.VisualStyles.Off;
@@ -250,8 +265,8 @@
             this.fpSpread1_Sheet1.Cells.Get(3, 0).ForeColor = System.Drawing.Color.Silver;
             this.fpSpread1_Sheet1.Cells.Get(3, 0).VisualStyles = FarPoint.Win.VisualStyles.Off;
             this.fpSpread1_Sheet1.Cells.Get(3, 1).BackColor = System.Drawing.SystemColors.ControlLight;
-            textCellType3.ReadOnly = true;
-            this.fpSpread1_Sheet1.Cells.Get(3, 1).CellType = textCellType3;
+            textCellType12.ReadOnly = true;
+            this.fpSpread1_Sheet1.Cells.Get(3, 1).CellType = textCellType12;
             this.fpSpread1_Sheet1.Cells.Get(3, 1).ColumnSpan = 2;
             this.fpSpread1_Sheet1.Cells.Get(3, 1).ForeColor = System.Drawing.Color.Black;
             this.fpSpread1_Sheet1.Cells.Get(3, 1).Value = "Level";
@@ -260,17 +275,17 @@
             this.fpSpread1_Sheet1.Cells.Get(3, 2).ForeColor = System.Drawing.Color.Silver;
             this.fpSpread1_Sheet1.Cells.Get(3, 2).VisualStyles = FarPoint.Win.VisualStyles.Off;
             this.fpSpread1_Sheet1.Cells.Get(3, 3).BackColor = System.Drawing.Color.White;
-            comboBoxCellType1.AutoSearch = FarPoint.Win.AutoSearch.MultipleCharacter;
-            comboBoxCellType1.ButtonAlign = FarPoint.Win.ButtonAlign.Right;
-            comboBoxCellType1.ItemData = new string[] {
+            comboBoxCellType4.AutoSearch = FarPoint.Win.AutoSearch.MultipleCharacter;
+            comboBoxCellType4.ButtonAlign = FarPoint.Win.ButtonAlign.Right;
+            comboBoxCellType4.ItemData = new string[] {
         "1",
         "2",
         "3"};
-            comboBoxCellType1.Items = new string[] {
+            comboBoxCellType4.Items = new string[] {
         "Slow",
         "Normal",
         "Fast"};
-            this.fpSpread1_Sheet1.Cells.Get(3, 3).CellType = comboBoxCellType1;
+            this.fpSpread1_Sheet1.Cells.Get(3, 3).CellType = comboBoxCellType4;
             this.fpSpread1_Sheet1.Cells.Get(3, 3).ColumnSpan = 3;
             this.fpSpread1_Sheet1.Cells.Get(3, 3).ForeColor = System.Drawing.Color.Black;
             this.fpSpread1_Sheet1.Cells.Get(3, 3).Value = "Normal";
@@ -474,6 +489,9 @@
             this.fpSpread1_Sheet1.Cells.Get(24, 19).BackColor = System.Drawing.SystemColors.ControlLight;
             this.fpSpread1_Sheet1.ColumnHeader.Visible = false;
             this.fpSpread1_Sheet1.Columns.Default.Width = 20F;
+            this.fpSpread1_Sheet1.DataAutoCellTypes = false;
+            this.fpSpread1_Sheet1.DataAutoHeadings = false;
+            this.fpSpread1_Sheet1.DataAutoSizeColumns = false;
             this.fpSpread1_Sheet1.DrawingContainer.ContainedObjects.AddRange(new object[] {
             ((object)(resources.GetObject("resource.ContainedObjects")))});
             this.fpSpread1_Sheet1.DrawingContainer.FlipHorizontal = false;
@@ -481,6 +499,7 @@
             this.fpSpread1_Sheet1.HorizontalGridLine = new FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.SystemColors.ControlLight);
             this.fpSpread1_Sheet1.RowHeader.Columns.Default.Resizable = false;
             this.fpSpread1_Sheet1.RowHeader.Visible = false;
+            this.fpSpread1_Sheet1.SelectionStyle = FarPoint.Win.Spread.SelectionStyles.None;
             this.fpSpread1_Sheet1.SheetCornerHorizontalGridLine = new FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Raised, System.Drawing.SystemColors.ControlLight, System.Drawing.SystemColors.ControlLight, System.Drawing.SystemColors.ControlLight);
             this.fpSpread1_Sheet1.VerticalGridLine = new FarPoint.Win.Spread.GridLine(FarPoint.Win.Spread.GridLineType.Flat, System.Drawing.SystemColors.ControlLight, System.Drawing.SystemColors.ControlLight, System.Drawing.SystemColors.ControlLight);
             this.fpSpread1_Sheet1.ReferenceStyle = FarPoint.Win.Spread.Model.ReferenceStyle.A1;
@@ -494,9 +513,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.ClientSize = new System.Drawing.Size(398, 499);
             this.Controls.Add(this.fpSpread1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form2";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form2";
             ((System.ComponentModel.ISupportInitialize)(this.fpSpread1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fpSpread1_Sheet1)).EndInit();
@@ -506,8 +530,8 @@
 
         #endregion
 
-        private FarPoint.Win.Spread.FpSpread fpSpread1;
         private FarPoint.Win.Spread.SheetView fpSpread1_Sheet1;
         private System.Windows.Forms.Timer tmTick;
+        private FarPoint.Win.Spread.FpSpread fpSpread1;
     }
 }

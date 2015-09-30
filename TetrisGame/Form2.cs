@@ -60,6 +60,13 @@ namespace TetrisGame
         public Form2()
         {
             InitializeComponent();
+
+            //Set default cursor
+            fpSpread1.SetCursor(FarPoint.Win.Spread.CursorType.Normal, System.Windows.Forms.Cursors.Default);
+
+            //Set focus to button cell
+            fpSpread1_Sheet1.SetActiveCell(1, 1, true);
+
             //Save the shape to object and remove it from the spread
             _rectGameOver = fpSpread1_Sheet1.GetShape("rectGameOver");
             fpSpread1_Sheet1.RemoveShape("rectGameOver");
@@ -94,12 +101,17 @@ namespace TetrisGame
             {
                 //Shape can't be moved down, check for cleared rows
                 CheckRows();
-                //Assign pending shape to current shape
-                _currentShape = GenerateRandomShape(false);
 
-                //Create new pending shape
-                _pendingShape.Reset();
-                _pendingShape = GenerateRandomShape(true);
+                //Continue when the game is not over yet
+                if (!_isGameOver)
+                {
+                    //Assign pending shape to current shape
+                    _currentShape = GenerateRandomShape(false);
+
+                    //Create new pending shape
+                    _pendingShape.Reset();
+                    _pendingShape = GenerateRandomShape(true);
+                }
             }
         }
 
@@ -336,6 +348,23 @@ namespace TetrisGame
                     _currentLevel = selectedLevel;
                 }
             }
+        }
+
+        private void fpSpread1_CellClick(object sender, CellClickEventArgs e)
+        {
+            if ((e.Row == 3 && e.Column == 3) || (e.Column == 1 && e.Row == 1))
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void fpSpread1_CellDoubleClick(object sender, CellClickEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }
