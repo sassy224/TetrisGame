@@ -9,6 +9,6 @@ namespace TetrisGame.Enums
     {
         Slow = 1000,
         Normal = 400,
-        Fast = 200
+        Fast = 100
     }
 }

@@ -45,6 +45,10 @@ namespace TetrisGame.Shape
         /// </summary>
         private ShapeDirections _currentShapeDirection = ShapeDirections.FaceUp;
 
+        private int BORDER_LEFT = Constants.BASE_WIDTH_OFFSET;
+        private int BORDER_RIGHT = Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET;
+        private int BORDER_BOTTOM = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
+
         public TShape(SheetView sheet, int rowIdx, int colIdx, ShapeDirections direction)
         {
             _sheet = sheet;
@@ -340,11 +344,11 @@ namespace TetrisGame.Shape
 
                 case ShapeDirections.FaceRight:
                     //Current is FaceUp
-                    curRightCornerColIdx = _topRowIdx;
-                    curRightCornerRowIdx = _rightColIdx;
+                    curRightCornerColIdx = _rightColIdx;
+                    curRightCornerRowIdx = _topRowIdx;
 
-                    curRightCornerColIdx = _topRowIdx;
-                    curRightCornerRowIdx = _leftColIdx;
+                    curLeftCornerColIdx = _leftColIdx;
+                    curLeftCornerRowIdx = _topRowIdx;
 
                     nextRightCornerColIdx = _rightColIdx;
                     nextRightCornerRowIdx = _rightRowIdx - 1;
@@ -356,7 +360,7 @@ namespace TetrisGame.Shape
             }
 
             //When the center cell reaches borders, can't rotate
-            if (_centerColIdx == 0 || _centerColIdx == Constants.MAX_WIDTH - 1 || _centerRowIdx == Constants.MAX_HEIGHT - 1)
+            if (_centerColIdx == BORDER_LEFT || _centerColIdx == BORDER_RIGHT - 1 || _centerRowIdx == BORDER_BOTTOM - 1)
                 return false;
 
             //The shape can be rotated if there's no ButtonCellType in its current left corner, current right corner,
@@ -366,8 +370,8 @@ namespace TetrisGame.Shape
             nextRightCornerCellType = _sheet.Cells[nextRightCornerRowIdx, nextRightCornerColIdx].CellType;
             nextRightCellType = _sheet.Cells[nextRightRowIdx, nextRightColIdx].CellType;
 
-            if (nextRightCornerCellType is ButtonCellType || nextRightCellType is ButtonCellType
-                || curLeftCornerCellType is ButtonCellType || curRightCornerCellType is ButtonCellType)
+            if (nextRightCornerCellType != null || nextRightCellType != null
+                || curLeftCornerCellType != null || curRightCornerCellType != null)
                 return false;
 
             return true;
@@ -437,11 +441,12 @@ namespace TetrisGame.Shape
             }
 
             //If any row or col idx of the new locations go over the border, stops
-            if (nextCenterRowIdx >= Constants.MAX_HEIGHT || nextLeftRowIdx >= Constants.MAX_HEIGHT
-                || nextRightRowIdx >= Constants.MAX_HEIGHT || nextTopRowIdx >= Constants.MAX_HEIGHT
-                || nextCenterColIdx >= Constants.MAX_WIDTH || nextLeftColIdx >= Constants.MAX_WIDTH
-                || nextRightColIdx >= Constants.MAX_WIDTH || nextTopColIdx >= Constants.MAX_WIDTH
-                || nextCenterColIdx < 0 || nextLeftColIdx < 0 || nextRightColIdx < 0 || nextTopColIdx < 0)
+            if (nextCenterRowIdx >= BORDER_BOTTOM || nextLeftRowIdx >= BORDER_BOTTOM
+                || nextRightRowIdx >= BORDER_BOTTOM || nextTopRowIdx >= BORDER_BOTTOM
+                || nextCenterColIdx >= BORDER_RIGHT || nextLeftColIdx >= BORDER_RIGHT
+                || nextRightColIdx >= BORDER_RIGHT || nextTopColIdx >= BORDER_RIGHT
+                || nextCenterColIdx < BORDER_LEFT || nextLeftColIdx < BORDER_LEFT
+                || nextRightColIdx < BORDER_LEFT || nextTopColIdx < BORDER_LEFT)
                 return false;
 
             //The shape can be moved if the cells at the next location are not ButtonCellType
@@ -457,21 +462,21 @@ namespace TetrisGame.Shape
                     switch (nextDirection)
                     {
                         case MovingDirections.Down:
-                            if (nextLeftCellType is ButtonCellType || nextCenterCellType is ButtonCellType || nextRightCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextCenterCellType != null || nextRightCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Left:
-                            if (nextLeftCellType is ButtonCellType)
+                            if (nextLeftCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Right:
-                            if (nextRightCellType is ButtonCellType)
+                            if (nextRightCellType != null)
                             {
                                 canMove = false;
                             }
@@ -483,21 +488,21 @@ namespace TetrisGame.Shape
                     switch (nextDirection)
                     {
                         case MovingDirections.Down:
-                            if (nextTopCellType is ButtonCellType || nextRightCellType is ButtonCellType)
+                            if (nextTopCellType != null || nextRightCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Left:
-                            if (nextLeftCellType is ButtonCellType || nextRightCellType is ButtonCellType || nextCenterCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextRightCellType != null || nextCenterCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Right:
-                            if (nextLeftCellType is ButtonCellType || nextRightCellType is ButtonCellType || nextTopCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextRightCellType != null || nextTopCellType != null)
                             {
                                 canMove = false;
                             }
@@ -509,21 +514,21 @@ namespace TetrisGame.Shape
                     switch (nextDirection)
                     {
                         case MovingDirections.Down:
-                            if (nextLeftCellType is ButtonCellType || nextTopCellType is ButtonCellType || nextRightCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextTopCellType != null || nextRightCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Left:
-                            if (nextRightCellType is ButtonCellType || nextTopCellType is ButtonCellType)
+                            if (nextRightCellType != null || nextTopCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Right:
-                            if (nextLeftCellType is ButtonCellType || nextTopCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextTopCellType != null)
                             {
                                 canMove = false;
                             }
@@ -535,21 +540,21 @@ namespace TetrisGame.Shape
                     switch (nextDirection)
                     {
                         case MovingDirections.Down:
-                            if (nextTopCellType is ButtonCellType || nextLeftCellType is ButtonCellType)
+                            if (nextTopCellType != null || nextLeftCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Left:
-                            if (nextLeftCellType is ButtonCellType || nextRightCellType is ButtonCellType || nextTopCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextRightCellType != null || nextTopCellType != null)
                             {
                                 canMove = false;
                             }
                             break;
 
                         case MovingDirections.Right:
-                            if (nextLeftCellType is ButtonCellType || nextRightCellType is ButtonCellType || nextCenterCellType is ButtonCellType)
+                            if (nextLeftCellType != null || nextRightCellType != null || nextCenterCellType != null)
                             {
                                 canMove = false;
                             }
