@@ -298,7 +298,7 @@ namespace TetrisGame
                 return true;
             }
 
-            //Capture Esc key
+            //Capture Space key
             if (keyData == Keys.Space)
             {
                 if (!_isGameOver)

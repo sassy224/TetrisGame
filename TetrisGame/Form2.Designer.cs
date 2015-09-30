@@ -506,7 +506,7 @@
             // 
             // tmTick
             // 
-            this.tmTick.Interval = 1000;
+            this.tmTick.Interval = 400;
             this.tmTick.Tick += new System.EventHandler(this.tmTick_Tick);
             // 
             // Form2
