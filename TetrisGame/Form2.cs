@@ -144,7 +144,7 @@ namespace TetrisGame
                 for (int col = Constants.BASE_WIDTH_OFFSET; col < Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET; col++)
                 {
                     //If there's any row that is not of ButtonCellType, skip it
-                    if (!(fpSpread1_Sheet1.Cells[row, col].CellType is ButtonCellType))
+                    if ((fpSpread1_Sheet1.Cells[row, col].CellType == null))
                     {
                         cleared = false;
                         break;
@@ -157,13 +157,15 @@ namespace TetrisGame
                 }
             }
 
+            int removedCount = 0;
+
             foreach (int rowIdx in lstClearedRowIdxes)
             {
-                //Change color
                 //Remove the row
-                fpSpread1_Sheet1.Rows.Get(rowIdx).Remove();
+                fpSpread1_Sheet1.Rows.Get(rowIdx + removedCount).Remove();
                 //Add a new one at the top
                 fpSpread1_Sheet1.Rows.Add(Constants.BASE_HEIGHT_OFFSET, 1);
+
                 //Update color for newly created cells
                 this.fpSpread1_Sheet1.Cells.Get(5, 0).BackColor = System.Drawing.SystemColors.ControlLight;
                 this.fpSpread1_Sheet1.Cells.Get(5, 0).ForeColor = System.Drawing.Color.Silver;
@@ -174,6 +176,9 @@ namespace TetrisGame
 
                 //Update score
                 fpSpread1_Sheet1.Cells[2, 12].Text = (Int32.Parse(fpSpread1_Sheet1.Cells[2, 12].Text) + 100).ToString();
+
+                //Increase the count so next row will be removed correctly
+                removedCount++;
             }
         }
 
@@ -200,7 +205,7 @@ namespace TetrisGame
             if (forPreview)
             {
                 //Create a random shape
-                _currentShapeModel = (TetrisShapes)_random.Next(1, 1);
+                _currentShapeModel = (TetrisShapes)_random.Next(1, 3);
             }
 
             switch (_currentShapeModel)

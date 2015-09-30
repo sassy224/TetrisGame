@@ -40,6 +40,13 @@ namespace TetrisGame.Shape
         private int _initRowIdx = 0;
         private int _initColIdx = 0;
 
+        /// <summary>
+        /// Borders' location
+        /// </summary>
+        private int BORDER_LEFT = Constants.BASE_WIDTH_OFFSET;
+        private int BORDER_RIGHT = Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET;
+        private int BORDER_BOTTOM = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
+
         public SShape(SheetView sheet, int rowIdx, int colIdx)
         {
             _sheet = sheet;
@@ -51,20 +58,17 @@ namespace TetrisGame.Shape
 
         private void Initialize()
         {
-            //Create random location for top left cell
-            int colIdx = new Random().Next(1, Constants.MAX_WIDTH - 2);
+            _topLeftColIdx = _initColIdx;
+            _topLeftRowIdx = _initRowIdx;
 
-            _topLeftRowIdx = colIdx;
-            _topLeftColIdx = 0;
+            _bottomLeftColIdx = _topLeftColIdx;
+            _bottomLeftRowIdx = _topLeftRowIdx + 1;
 
-            _bottomLeftColIdx = colIdx;
-            _bottomLeftRowIdx = 1;
+            _topRightColIdx = _topLeftColIdx + 1;
+            _topRightRowIdx = _topLeftRowIdx;
 
-            _topRightColIdx = colIdx + 1;
-            _topRightRowIdx = 0;
-
-            _bottomRightColIdx = colIdx + 1;
-            _bottomRightRowIdx = 1;
+            _bottomRightColIdx = _topLeftColIdx + 1;
+            _bottomRightRowIdx = _topLeftRowIdx + 1;
 
             //Draw the shape
             Draw();
@@ -107,10 +111,7 @@ namespace TetrisGame.Shape
             _topRightColIdx -= 1;
             _bottomRightColIdx -= 1;
 
-            _topLeft.ResetCellType();
-            _bottomLeft.ResetCellType();
-            _bottomRight.ResetCellType();
-            _topRight.ResetCellType();
+            Reset();
 
             Draw();
         }
@@ -126,10 +127,7 @@ namespace TetrisGame.Shape
             _topRightColIdx += 1;
             _bottomRightColIdx += 1;
 
-            _topLeft.ResetCellType();
-            _bottomLeft.ResetCellType();
-            _bottomRight.ResetCellType();
-            _topRight.ResetCellType();
+            Reset();
 
             Draw();
         }
@@ -145,10 +143,7 @@ namespace TetrisGame.Shape
             _topRightRowIdx += 1;
             _bottomRightRowIdx += 1;
 
-            _topLeft.ResetCellType();
-            _bottomLeft.ResetCellType();
-            _bottomRight.ResetCellType();
-            _topRight.ResetCellType();
+            Reset();
 
             Draw();
         }
@@ -197,7 +192,7 @@ namespace TetrisGame.Shape
                     nextBottomRightRowIdx = _bottomRightRowIdx;
 
                     nextTopLeftColIdx = _topLeftColIdx + 1;
-                    nextBottomLeftColIdx = _bottomRightColIdx + 1;
+                    nextBottomLeftColIdx = _bottomLeftColIdx + 1;
                     nextTopRightColIdx = _topRightColIdx + 1;
                     nextBottomRightColIdx = _bottomRightColIdx + 1;
                     break;
@@ -209,7 +204,7 @@ namespace TetrisGame.Shape
                     nextBottomRightRowIdx = _bottomRightRowIdx;
 
                     nextTopLeftColIdx = _topLeftColIdx - 1;
-                    nextBottomLeftColIdx = _bottomRightColIdx - 1;
+                    nextBottomLeftColIdx = _bottomLeftColIdx - 1;
                     nextTopRightColIdx = _topRightColIdx - 1;
                     nextBottomRightColIdx = _bottomRightColIdx - 1;
                     break;
@@ -221,16 +216,16 @@ namespace TetrisGame.Shape
                     nextBottomRightRowIdx = _bottomRightRowIdx + 1;
 
                     nextTopLeftColIdx = _topLeftColIdx;
-                    nextBottomLeftColIdx = _bottomRightColIdx;
+                    nextBottomLeftColIdx = _bottomLeftColIdx;
                     nextTopRightColIdx = _topRightColIdx;
                     nextBottomRightColIdx = _bottomRightColIdx;
                     break;
             }
 
             //If any row or col idx of the new locations go over the border, stops
-            if (nextBottomLeftColIdx < 0 || nextBottomLeftRowIdx >= Constants.MAX_HEIGHT
-                || nextBottomRightColIdx >= Constants.MAX_WIDTH
-                || nextBottomRightRowIdx >= Constants.MAX_HEIGHT)
+            if (nextBottomLeftColIdx < BORDER_LEFT || nextBottomLeftRowIdx >= BORDER_BOTTOM
+                || nextBottomRightColIdx >= BORDER_RIGHT
+                || nextBottomRightRowIdx >= BORDER_BOTTOM)
                 return false;
 
             //The shape can be moved if the cells at the next location are not ButtonCellType
@@ -243,21 +238,21 @@ namespace TetrisGame.Shape
             switch (nextDirection)
             {
                 case MovingDirections.Down:
-                    if (nextBottomLeftCellType is ButtonCellType || nextBottomRightCellType is ButtonCellType)
+                    if (nextBottomLeftCellType != null || nextBottomRightCellType != null)
                     {
                         canMove = false;
                     }
                     break;
 
                 case MovingDirections.Left:
-                    if (nextBottomLeftCellType is ButtonCellType || nextTopLeftCellType is ButtonCellType)
+                    if (nextBottomLeftCellType != null || nextTopLeftCellType != null)
                     {
                         canMove = false;
                     }
                     break;
 
                 case MovingDirections.Right:
-                    if (nextTopRightCellType is ButtonCellType || nextBottomRightCellType is ButtonCellType)
+                    if (nextTopRightCellType != null || nextBottomRightCellType != null)
                     {
                         canMove = false;
                     }

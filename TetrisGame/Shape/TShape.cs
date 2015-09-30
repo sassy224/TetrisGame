@@ -45,6 +45,9 @@ namespace TetrisGame.Shape
         /// </summary>
         private ShapeDirections _currentShapeDirection = ShapeDirections.FaceUp;
 
+        /// <summary>
+        /// Borders' location
+        /// </summary>
         private int BORDER_LEFT = Constants.BASE_WIDTH_OFFSET;
         private int BORDER_RIGHT = Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET;
         private int BORDER_BOTTOM = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
@@ -223,10 +226,7 @@ namespace TetrisGame.Shape
             _topColIdx -= 1;
             _rightColIdx -= 1;
 
-            _center.ResetCellType();
-            _left.ResetCellType();
-            _top.ResetCellType();
-            _right.ResetCellType();
+            Reset();
 
             Draw();
         }
@@ -242,10 +242,7 @@ namespace TetrisGame.Shape
             _topColIdx += 1;
             _rightColIdx += 1;
 
-            _center.ResetCellType();
-            _left.ResetCellType();
-            _top.ResetCellType();
-            _right.ResetCellType();
+            Reset();
 
             Draw();
         }
@@ -261,10 +258,7 @@ namespace TetrisGame.Shape
             _topRowIdx += 1;
             _rightRowIdx += 1;
 
-            _center.ResetCellType();
-            _left.ResetCellType();
-            _top.ResetCellType();
-            _right.ResetCellType();
+            Reset();
 
             Draw();
         }
