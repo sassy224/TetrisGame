@@ -57,6 +57,10 @@ namespace TetrisGame
         /// Variable to store the current level setting of the game
         /// </summary>
         private string _currentLevel;
+        /// <summary>
+        /// Variable to store the current side setting for LShape and ZShape
+        /// </summary>
+        private bool _isLeft = false;
 
         public Form2()
         {
@@ -245,6 +249,12 @@ namespace TetrisGame
 
             if (forPreview)
             {
+                //Create a random side
+                _isLeft = _random.Next() % 2 == 1;
+            }
+
+            if (forPreview)
+            {
                 //Create a random direction
                 _currentDirection = (ShapeDirections)_random.Next(1, 5);
             }
@@ -280,7 +290,7 @@ namespace TetrisGame
                     break;
 
                 case TetrisShapes.LShape:
-                    shape = new LShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, false);
+                    shape = new LShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
                     break;
             }
 
