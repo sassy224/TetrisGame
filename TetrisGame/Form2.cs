@@ -40,7 +40,7 @@ namespace TetrisGame
         /// <summary>
         /// Variable to hold the current Shape model
         /// </summary>
-        private TetrisShapes _currentShapeModel = TetrisShapes.TShape;
+        private TetrisShapes _currentShapeModel = TetrisShapes.LShape;
         /// <summary>
         /// Variable to store the rectangle shape object of the spread
         /// </summary>
@@ -114,7 +114,7 @@ namespace TetrisGame
                     _currentShape = GenerateRandomShape(false);
 
                     //Create new pending shape
-                    _pendingShape.Reset();
+                    _pendingShape.ResetCells();
                     _pendingShape = GenerateRandomShape(true);
 
                     //Remap action for new shape
@@ -246,7 +246,7 @@ namespace TetrisGame
             if (forPreview)
             {
                 //Create a random direction
-                _currentDirection = (ShapeDirections)_random.Next(1, 4);
+                _currentDirection = (ShapeDirections)_random.Next(1, 5);
             }
 
             //Init location
@@ -262,7 +262,7 @@ namespace TetrisGame
             if (forPreview)
             {
                 //Create a random shape
-                _currentShapeModel = (TetrisShapes)_random.Next(1, 4);
+                _currentShapeModel = (TetrisShapes)_random.Next(1, 5);
             }
 
             switch (_currentShapeModel)
@@ -277,6 +277,10 @@ namespace TetrisGame
 
                 case TetrisShapes.DotShape:
                     shape = new DotShape(fpSpread1_Sheet1, rowIdx, colIdx);
+                    break;
+
+                case TetrisShapes.LShape:
+                    shape = new LShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, false);
                     break;
             }
 

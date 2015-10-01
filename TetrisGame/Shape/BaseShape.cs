@@ -2,6 +2,7 @@
 using FarPoint.Win.Spread.CellType;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using TetrisGame.Enums;
@@ -72,6 +73,12 @@ namespace TetrisGame.Shape
         protected int BORDER_RIGHT = Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET;
         protected int BORDER_BOTTOM = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
 
+        /// <summary>
+        /// Base constructor
+        /// </summary>
+        /// <param name="sheet">The sheetview object</param>
+        /// <param name="rowIdx">The init row index</param>
+        /// <param name="colIdx">The init col index</param>
         public BaseShape(SheetView sheet, int rowIdx, int colIdx)
         {
             _sheet = sheet;
@@ -79,6 +86,9 @@ namespace TetrisGame.Shape
             _initColIdx = colIdx;
         }
 
+        /// <summary>
+        /// Base draw function, only draw cells that have positive coordinate
+        /// </summary>
         public virtual void Draw()
         {
             if (_centerRowIdx != -1 && _centerColIdx != -1)
@@ -136,10 +146,16 @@ namespace TetrisGame.Shape
             }
         }
 
+        /// <summary>
+        /// Base rotate function, do nothing
+        /// </summary>
         public virtual void Rotate()
         {
         }
 
+        /// <summary>
+        /// Base move left function, move all cells coordinates to the left
+        /// </summary>
         public virtual void MoveLeft()
         {
             if (_center != null) _centerColIdx -= 1;
@@ -152,10 +168,13 @@ namespace TetrisGame.Shape
             if (_topRight != null) _topRightColIdx -= 1;
             if (_bottomRight != null) _bottomRightColIdx -= 1;
 
-            Reset();
+            ResetCells();
             Draw();
         }
 
+        /// <summary>
+        /// Base move right function, move all cells coordinates to the right
+        /// </summary>
         public virtual void MoveRight()
         {
             if (_center != null) _centerColIdx += 1;
@@ -168,10 +187,13 @@ namespace TetrisGame.Shape
             if (_topRight != null) _topRightColIdx += 1;
             if (_bottomRight != null) _bottomRightColIdx += 1;
 
-            Reset();
+            ResetCells();
             Draw();
         }
 
+        /// <summary>
+        /// Base move down function, move all cells coordinates down
+        /// </summary>
         public virtual void MoveDown()
         {
             if (_center != null) _centerRowIdx += 1;
@@ -184,20 +206,34 @@ namespace TetrisGame.Shape
             if (_topRight != null) _topRightRowIdx += 1;
             if (_bottomRight != null) _bottomRightRowIdx += 1;
 
-            Reset();
+            ResetCells();
             Draw();
         }
 
+        /// <summary>
+        /// Base function to check whether the shape can be rotated. Default is return true
+        /// </summary>
+        /// <param name="nextDirection"></param>
+        /// <returns></returns>
         public virtual bool CanRotate(ShapeDirections nextDirection)
         {
             return true;
         }
 
+        /// <summary>
+        /// Base function to check whether the shape can move. Default is return true
+        /// </summary>
+        /// <param name="nextDirection"></param>
+        /// <returns></returns>
         public virtual bool CanMove(MovingDirections nextDirection)
         {
             return true;
         }
 
+        /// <summary>
+        /// Base function to return array of all initialized cells
+        /// </summary>
+        /// <returns></returns>
         public virtual Cell[] GetCells()
         {
             List<Cell> cells = new List<Cell>(9);
@@ -215,24 +251,100 @@ namespace TetrisGame.Shape
             return cells.ToArray();
         }
 
+        /// <summary>
+        /// Base function to set SheetView object
+        /// </summary>
+        /// <param name="sheet"></param>
         public virtual void SetSheetView(SheetView sheet)
         {
             _sheet = sheet;
         }
 
-        public virtual void Reset()
+        /// <summary>
+        /// Base function to reset all cells
+        /// </summary>
+        public virtual void ResetCells()
         {
-            if (_center != null) _center.ResetCellType();
-            if (_top != null) _top.ResetCellType();
-            if (_bottom != null) _bottom.ResetCellType();
-            if (_left != null) _left.ResetCellType();
-            if (_right != null) _right.ResetCellType();
-            if (_topLeft != null) _topLeft.ResetCellType();
-            if (_bottomLeft != null) _bottomLeft.ResetCellType();
-            if (_topRight != null) _topRight.ResetCellType();
-            if (_bottomRight != null) _bottomRight.ResetCellType();
+            if (_center != null)
+            {
+                _center.ResetCellType();
+                _center = null;
+            }
+            if (_top != null)
+            {
+                _top.ResetCellType();
+                _top = null;
+            }
+            if (_bottom != null)
+            {
+                _bottom.ResetCellType();
+                _bottom = null;
+            }
+            if (_left != null)
+            {
+                _left.ResetCellType();
+                _left = null;
+            }
+            if (_right != null)
+            {
+                _right.ResetCellType();
+                _right = null;
+            }
+            if (_topLeft != null)
+            {
+                _topLeft.ResetCellType();
+                _topLeft = null;
+            }
+            if (_bottomLeft != null)
+            {
+                _bottomLeft.ResetCellType();
+                _bottomLeft = null;
+            };
+            if (_topRight != null)
+            {
+                _topRight.ResetCellType();
+                _topRight = null;
+            }
+            if (_bottomRight != null)
+            {
+                _bottomRight.ResetCellType();
+                _bottomRight = null;
+            }
         }
 
+        /// <summary>
+        /// Base function to reset all location variables except the center one
+        /// </summary>
+        protected virtual void ResetLocations()
+        {
+            _leftColIdx = -1;
+            _leftRowIdx = -1;
+
+            _rightColIdx = -1;
+            _rightRowIdx = -1;
+
+            _topColIdx = -1;
+            _topRowIdx = -1;
+
+            _bottomColIdx = -1;
+            _bottomRowIdx = -1;
+
+            _topLeftColIdx = -1;
+            _topLeftRowIdx = -1;
+
+            _bottomLeftColIdx = -1;
+            _bottomLeftRowIdx = -1;
+
+            _topRightColIdx = -1;
+            _topRightRowIdx = -1;
+
+            _bottomRightColIdx = -1;
+            _bottomRightRowIdx = -1;
+        }
+
+        /// <summary>
+        /// Base function to save locations of cells to variables
+        /// </summary>
         protected virtual void SaveLocations()
         {
             if (_center != null)
@@ -288,6 +400,51 @@ namespace TetrisGame.Shape
                 _bottomRightColIdx = _bottomRight.Column.Index;
                 _bottomRightRowIdx = _bottomRight.Row.Index;
             }
+        }
+
+        /// <summary>
+        /// Get the minimum column index based on the current shape
+        /// </summary>
+        /// <returns>Min column index</returns>
+        protected virtual int GetCurrentMinColIdx()
+        {
+            int min = _centerColIdx;
+
+            if (_topLeft != null) min = Math.Min(_topLeftColIdx, min);
+            if (_bottomLeft != null) min = Math.Min(_bottomLeftColIdx, min);
+            if (_left != null) min = Math.Min(_leftColIdx, min);
+
+            return min;
+        }
+
+        /// <summary>
+        /// Get the maximum column index based on the current shape
+        /// </summary>
+        /// <returns></returns>
+        protected virtual int GetCurrentMaxColIdx()
+        {
+            int max = _centerColIdx;
+
+            if (_topRight != null) max = Math.Min(_topRightColIdx, max);
+            if (_bottomRight != null) max = Math.Min(_bottomRightColIdx, max);
+            if (_right != null) max = Math.Min(_rightColIdx, max);
+
+            return max;
+        }
+
+        /// <summary>
+        /// Get the maximum row index based on the current shape
+        /// </summary>
+        /// <returns></returns>
+        protected virtual int GetCurrentMaxRowIdx()
+        {
+            int max = _centerRowIdx;
+
+            if (_bottomLeft != null) max = Math.Max(_bottomLeftRowIdx, max);
+            if (_bottomRight != null) max = Math.Max(_bottomRightRowIdx, max);
+            if (_bottom != null) max = Math.Max(_bottomRowIdx, max);
+
+            return max;
         }
     }
 }

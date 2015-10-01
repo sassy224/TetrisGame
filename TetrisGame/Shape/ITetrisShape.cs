@@ -63,6 +63,6 @@ namespace TetrisGame.Shape
         /// <summary>
         /// Interface method to reset all the cells of the shape
         /// </summary>
-        void Reset();
+        void ResetCells();
     }
 }

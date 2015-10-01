@@ -75,24 +75,6 @@ namespace TetrisGame.Shape
         }
 
         /// <summary>
-        /// Draw the shape by filling the cells with ButtonCellType to make it look different
-        /// </summary>
-        public void Draw()
-        {
-            _center = _sheet.Cells[_centerRowIdx, _centerColIdx];
-            _center.CellType = new ButtonCellType();
-
-            _left = _sheet.Cells[_leftRowIdx, _leftColIdx];
-            _left.CellType = new ButtonCellType();
-
-            _right = _sheet.Cells[_rightRowIdx, _rightColIdx];
-            _right.CellType = new ButtonCellType();
-
-            _top = _sheet.Cells[_topRowIdx, _topColIdx];
-            _top.CellType = new ButtonCellType();
-        }
-
-        /// <summary>
         /// Rotate the shape, in order from up -> right -> down -> left -> up
         /// </summary>
         public override void Rotate()

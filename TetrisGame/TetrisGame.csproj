@@ -70,6 +70,7 @@
     <Compile Include="Shape\ITetrisShape.cs" />
     <Compile Include="Shape\DotShape.cs" />
     <Compile Include="Shape\SShape.cs" />
+    <Compile Include="Shape\LShape.cs" />
     <Compile Include="Shape\TShape.cs" />
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
