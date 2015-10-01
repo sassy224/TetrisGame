@@ -76,6 +76,8 @@ namespace TetrisGame
             _previewRange = fpSpread1_Sheet1.Cells[1, 16, 3, 19];
             _gameRange = fpSpread1_Sheet1.Cells[5, 1, Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET, Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET];
             _currentLevel = GameLevels.Normal.ToString();
+
+            MapCustomActions(true);
         }
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace TetrisGame
             _isGameOver = false;
 
             //Map custom action
-            MapCustomActions(true);
+            MapCustomActions();
 
             //Start ticking
             tmTick.Start();
