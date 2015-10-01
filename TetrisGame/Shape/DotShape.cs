@@ -8,45 +8,11 @@ using TetrisGame.Enums;
 
 namespace TetrisGame.Shape
 {
-    public class DotShape : ITetrisShape
+    public class DotShape : BaseShape
     {
-        /// <summary>
-        /// The sheetview object that represents a sheet of the spread
-        /// </summary>
-        private SheetView _sheet = null;
-
-        /// <summary>
-        /// The one cell that represents a shape
-        /// </summary>
-        private Cell _center = null;
-        private int _centerRowIdx = 0;
-        private int _centerColIdx = 0;
-
-        /// <summary>
-        /// The init location of the shape
-        /// </summary>
-        private int _initRowIdx = 0;
-        private int _initColIdx = 0;
-
-        /// <summary>
-        /// The current direction of the shape
-        /// </summary>
-        private ShapeDirections _currentShapeDirection = ShapeDirections.FaceUp;
-
-        /// <summary>
-        /// Borders' location
-        /// </summary>
-        private int BORDER_LEFT = Constants.BASE_WIDTH_OFFSET;
-        private int BORDER_RIGHT = Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET;
-        private int BORDER_BOTTOM = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
-
-        public DotShape(SheetView sheet, int rowIdx, int colIdx, ShapeDirections direction)
+        public DotShape(SheetView sheet, int rowIdx, int colIdx)
+            : base(sheet, rowIdx, colIdx)
         {
-            _sheet = sheet;
-            _initColIdx = colIdx;
-            _initRowIdx = rowIdx;
-            _currentShapeDirection = direction;
-
             Initialize();
         }
 
@@ -61,67 +27,11 @@ namespace TetrisGame.Shape
         }
 
         /// <summary>
-        /// Draw the shape by filling the cells with ButtonCellType to make it look different
-        /// </summary>
-        public void Draw()
-        {
-            _center = _sheet.Cells[_centerRowIdx, _centerColIdx];
-            _center.CellType = new ButtonCellType();
-        }
-
-        /// <summary>
-        /// Rotate the shape, in order from up -> right -> down -> left -> up
-        /// </summary>
-        public void Rotate()
-        {
-            //This shape doesn't support rotation
-        }
-
-        /// <summary>
-        /// Move the shape to the left
-        /// </summary>
-        public void MoveLeft()
-        {
-            //Move all cells to the left
-            _centerColIdx -= 1;
-
-            Reset();
-
-            Draw();
-        }
-
-        /// <summary>
-        /// Move the shape to the right
-        /// </summary>
-        public void MoveRight()
-        {
-            //Move all cells to the right
-            _centerColIdx += 1;
-
-            Reset();
-
-            Draw();
-        }
-
-        /// <summary>
-        /// Move the shape down
-        /// </summary>
-        public void MoveDown()
-        {
-            //Move all cells down
-            _centerRowIdx += 1;
-
-            Reset();
-
-            Draw();
-        }
-
-        /// <summary>
         /// Check if the shape can be rotated to the next direction
         /// </summary>
         /// <param name="nextShape">The next shape after the rotation</param>
         /// <returns>true if can rotate, false otherwise</returns>
-        public bool CanRotate(ShapeDirections nextShape)
+        public override bool CanRotate(ShapeDirections nextShape)
         {
             //This shape doesn't support rotation
             return false;
@@ -132,7 +42,7 @@ namespace TetrisGame.Shape
         /// </summary>
         /// <param name="nextDirection">The direction the shape is going to be moved</param>
         /// <returns>true if it can move, false otherwise</returns>
-        public bool CanMove(MovingDirections nextDirection)
+        public override bool CanMove(MovingDirections nextDirection)
         {
             //The shape can be moved if the cells at the next location are not ButtonCellType
             int nextCenterRowIdx = 0;
@@ -172,41 +82,6 @@ namespace TetrisGame.Shape
                 return false;
 
             return canMove;
-        }
-
-        /// <summary>
-        /// Get all the cells that built up the shape
-        /// </summary>
-        /// <returns></returns>
-        public Cell[] GetCells()
-        {
-            return new Cell[4] { _center, _center, _center, _center };
-        }
-
-        /// <summary>
-        /// Set SheetView object to contain this shape
-        /// </summary>
-        /// <param name="sheet">SheetView object</param>
-        public void SetSheetView(SheetView sheet)
-        {
-            _sheet = sheet;
-        }
-
-        /// <summary>
-        /// Reset all cells that forms the shape
-        /// </summary>
-        public void Reset()
-        {
-            _center.ResetCellType();
-        }
-
-        /// <summary>
-        /// Save locations of the cells to variables
-        /// </summary>
-        private void SaveLocations()
-        {
-            _centerColIdx = _center.Column.Index;
-            _centerRowIdx = _center.Row.Index;
         }
     }
 }

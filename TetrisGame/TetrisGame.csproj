@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shape\BaseShape.cs" />
     <Compile Include="Shape\ITetrisShape.cs" />
     <Compile Include="Shape\DotShape.cs" />
     <Compile Include="Shape\SShape.cs" />

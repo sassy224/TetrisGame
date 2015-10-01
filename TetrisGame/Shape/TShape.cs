@@ -8,55 +8,11 @@ using TetrisGame.Enums;
 
 namespace TetrisGame.Shape
 {
-    public class TShape : ITetrisShape
+    public class TShape : BaseShape
     {
-        /// <summary>
-        /// The sheetview object that represents a sheet of the spread
-        /// </summary>
-        private SheetView _sheet = null;
-
-        /// <summary>
-        /// The four cells that represents a shape
-        /// </summary>
-        private Cell _center = null;
-        private int _centerRowIdx = 0;
-        private int _centerColIdx = 0;
-
-        private Cell _left = null;
-        private int _leftRowIdx = 0;
-        private int _leftColIdx = 0;
-
-        private Cell _right = null;
-        private int _rightRowIdx = 0;
-        private int _rightColIdx = 0;
-
-        private Cell _top = null;
-        private int _topRowIdx = 0;
-        private int _topColIdx = 0;
-
-        /// <summary>
-        /// The init location of the shape
-        /// </summary>
-        private int _initRowIdx = 0;
-        private int _initColIdx = 0;
-
-        /// <summary>
-        /// The current direction of the shape
-        /// </summary>
-        private ShapeDirections _currentShapeDirection = ShapeDirections.FaceUp;
-
-        /// <summary>
-        /// Borders' location
-        /// </summary>
-        private int BORDER_LEFT = Constants.BASE_WIDTH_OFFSET;
-        private int BORDER_RIGHT = Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET;
-        private int BORDER_BOTTOM = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
-
         public TShape(SheetView sheet, int rowIdx, int colIdx, ShapeDirections direction)
+            : base(sheet, rowIdx, colIdx)
         {
-            _sheet = sheet;
-            _initColIdx = colIdx;
-            _initRowIdx = rowIdx;
             _currentShapeDirection = direction;
 
             Initialize();
@@ -139,7 +95,7 @@ namespace TetrisGame.Shape
         /// <summary>
         /// Rotate the shape, in order from up -> right -> down -> left -> up
         /// </summary>
-        public void Rotate()
+        public override void Rotate()
         {
             switch (_currentShapeDirection)
             {
@@ -216,59 +172,11 @@ namespace TetrisGame.Shape
         }
 
         /// <summary>
-        /// Move the shape to the left
-        /// </summary>
-        public void MoveLeft()
-        {
-            //Move all cells to the left
-            _centerColIdx -= 1;
-            _leftColIdx -= 1;
-            _topColIdx -= 1;
-            _rightColIdx -= 1;
-
-            Reset();
-
-            Draw();
-        }
-
-        /// <summary>
-        /// Move the shape to the right
-        /// </summary>
-        public void MoveRight()
-        {
-            //Move all cells to the right
-            _centerColIdx += 1;
-            _leftColIdx += 1;
-            _topColIdx += 1;
-            _rightColIdx += 1;
-
-            Reset();
-
-            Draw();
-        }
-
-        /// <summary>
-        /// Move the shape down
-        /// </summary>
-        public void MoveDown()
-        {
-            //Move all cells down
-            _centerRowIdx += 1;
-            _leftRowIdx += 1;
-            _topRowIdx += 1;
-            _rightRowIdx += 1;
-
-            Reset();
-
-            Draw();
-        }
-
-        /// <summary>
         /// Check if the shape can be rotated to the next direction
         /// </summary>
         /// <param name="nextShape">The next shape after the rotation</param>
         /// <returns>true if can rotate, false otherwise</returns>
-        public bool CanRotate(ShapeDirections nextShape)
+        public override bool CanRotate(ShapeDirections nextShape)
         {
             //The shape can be rotated if there's no ButtonCellType in its current left corner, current right corner,
             //the next right corner and the next right cell
@@ -376,7 +284,7 @@ namespace TetrisGame.Shape
         /// </summary>
         /// <param name="nextDirection">The direction the shape is going to be moved</param>
         /// <returns>true if it can move, false otherwise</returns>
-        public bool CanMove(MovingDirections nextDirection)
+        public override bool CanMove(MovingDirections nextDirection)
         {
             //The shape can be moved if the cells at the next location are not ButtonCellType
             int nextLeftRowIdx = 0;
@@ -558,53 +466,6 @@ namespace TetrisGame.Shape
             }
 
             return canMove;
-        }
-
-        /// <summary>
-        /// Get all the cells that built up the shape
-        /// </summary>
-        /// <returns></returns>
-        public Cell[] GetCells()
-        {
-            return new Cell[4] { _center, _left, _right, _top };
-        }
-
-        /// <summary>
-        /// Set SheetView object to contain this shape
-        /// </summary>
-        /// <param name="sheet">SheetView object</param>
-        public void SetSheetView(SheetView sheet)
-        {
-            _sheet = sheet;
-        }
-
-        /// <summary>
-        /// Reset all cells that forms the shape
-        /// </summary>
-        public void Reset()
-        {
-            _top.ResetCellType();
-            _center.ResetCellType();
-            _left.ResetCellType();
-            _right.ResetCellType();
-        }
-
-        /// <summary>
-        /// Save locations of the cells to variables
-        /// </summary>
-        private void SaveLocations()
-        {
-            _centerColIdx = _center.Column.Index;
-            _centerRowIdx = _center.Row.Index;
-
-            _leftColIdx = _left.Column.Index;
-            _leftRowIdx = _left.Row.Index;
-
-            _topColIdx = _top.Column.Index;
-            _topRowIdx = _top.Row.Index;
-
-            _rightColIdx = _right.Column.Index;
-            _rightRowIdx = _right.Row.Index;
         }
     }
 }

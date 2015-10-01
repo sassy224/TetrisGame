@@ -174,8 +174,12 @@ namespace TetrisGame
         {
             //Get cells from shape
             Cell[] cells = _currentShape.GetCells();
-            //A shape is built by 4 cells, find the lowest row index of the 4 cells
-            int minRowIdx = Math.Min(Math.Min(cells[0].Row.Index, cells[1].Row.Index), Math.Min(cells[2].Row.Index, cells[3].Row.Index));
+            //A shape is built by multiple cells, find the lowest row index of all cells
+            int minRowIdx = Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET;
+            for (int i = 0; i < cells.Length; i++)
+            {
+                minRowIdx = Math.Min(cells[i].Row.Index, minRowIdx);
+            }
 
             //Check minRowIdx
             if (minRowIdx <= Constants.BASE_HEIGHT_OFFSET) //cells reach top of the border
@@ -272,7 +276,7 @@ namespace TetrisGame
                     break;
 
                 case TetrisShapes.DotShape:
-                    shape = new DotShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
+                    shape = new DotShape(fpSpread1_Sheet1, rowIdx, colIdx);
                     break;
             }
 
