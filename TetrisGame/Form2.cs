@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using TetrisGame.Actions;
 using TetrisGame.Enums;
 using TetrisGame.Shape;
 
@@ -87,6 +88,8 @@ namespace TetrisGame
             if (e.Column == 1 && e.Row == 1)
             {
                 GameStart();
+                //Change focus from the button so that when user presses the space bar, it won't perform a click on the button again
+                fpSpread1.Focus();
             }
         }
 
@@ -111,6 +114,9 @@ namespace TetrisGame
                     //Create new pending shape
                     _pendingShape.Reset();
                     _pendingShape = GenerateRandomShape(true);
+
+                    //Remap action for new shape
+                    MapCustomActions();
                 }
             }
         }
@@ -136,6 +142,9 @@ namespace TetrisGame
             fpSpread1_Sheet1.Cells[2, 12].Text = "0";
             _isGameOver = false;
 
+            //Map custom action
+            MapCustomActions(true);
+
             //Start ticking
             tmTick.Start();
         }
@@ -148,6 +157,12 @@ namespace TetrisGame
             tmTick.Stop();
             fpSpread1_Sheet1.AddShape(_rectGameOver);
             _isGameOver = true;
+
+            _currentShape = null;
+            _pendingShape = null;
+
+            //Because _currentShape is now null, calling MapCustomAction again will act as remove custom the custom actions
+            MapCustomActions();
         }
 
         /// <summary>
@@ -263,62 +278,97 @@ namespace TetrisGame
         }
 
         /// <summary>
+        /// Map arrow keys with custom actions
+        /// </summary>
+        /// <param name="isInit"></param>
+        private void MapCustomActions(bool isInit = false)
+        {
+            InputMap im = fpSpread1.GetInputMap(InputMapMode.WhenAncestorOfFocused);
+            ActionMap am = fpSpread1.GetActionMap();
+
+            if (isInit)
+            {
+                //Map both keys with/without modifier Control
+                im.Put(new Keystroke(Keys.Down, Keys.None), "MoveShapeDown");
+                im.Put(new Keystroke(Keys.Down, Keys.Control), "MoveShapeDown");
+
+                im.Put(new Keystroke(Keys.Left, Keys.None), "MoveShapeLeft");
+                im.Put(new Keystroke(Keys.Left, Keys.Control), "MoveShapeLeft");
+
+                im.Put(new Keystroke(Keys.Right, Keys.None), "MoveShapeRight");
+                im.Put(new Keystroke(Keys.Right, Keys.Control), "MoveShapeRight");
+
+                im.Put(new Keystroke(Keys.Up, Keys.None), "MoveShapeUp");
+                im.Put(new Keystroke(Keys.Up, Keys.Control), "MoveShapeUp");
+
+                im.Put(new Keystroke(Keys.Space, Keys.None), "RotateShape");
+                im.Put(new Keystroke(Keys.Space, Keys.Control), "RotateShape");
+            }
+
+            am.Put("MoveShapeDown", new MoveShape(_currentShape, MovingDirections.Down));
+            am.Put("MoveShapeLeft", new MoveShape(_currentShape, MovingDirections.Left));
+            am.Put("MoveShapeRight", new MoveShape(_currentShape, MovingDirections.Right));
+            am.Put("MoveShapeUp", new MoveShape(_currentShape, MovingDirections.Up));
+            am.Put("RotateShape", new RotateShape(_currentShape));
+        }
+
+        /// <summary>
         /// Overwrite method to process arrow key
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="keyData"></param>
         /// <returns></returns>
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            //Capture up arrow key
-            if (keyData == Keys.Up)
-            {
-                //Do nothing
-                return true;
-            }
-            //Capture down arrow key
-            if (keyData == Keys.Down)
-            {
-                if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Down))
-                    _currentShape.MoveDown();
-                return true;
-            }
-            //Capture left arrow key
-            if (keyData == Keys.Left)
-            {
-                if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Left))
-                    _currentShape.MoveLeft();
-                return true;
-            }
-            //Capture right arrow key
-            if (keyData == Keys.Right)
-            {
-                if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Right))
-                    _currentShape.MoveRight();
-                return true;
-            }
+        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        //{
+        //    //Capture up arrow key
+        //    if (keyData == Keys.Up)
+        //    {
+        //        //Do nothing
+        //        return true;
+        //    }
+        //    //Capture down arrow key
+        //    if (keyData == Keys.Down)
+        //    {
+        //        if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Down))
+        //            _currentShape.MoveDown();
+        //        return true;
+        //    }
+        //    //Capture left arrow key
+        //    if (keyData == Keys.Left)
+        //    {
+        //        if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Left))
+        //            _currentShape.MoveLeft();
+        //        return true;
+        //    }
+        //    //Capture right arrow key
+        //    if (keyData == Keys.Right)
+        //    {
+        //        if (!_isGameOver && _currentShape != null && _currentShape.CanMove(MovingDirections.Right))
+        //            _currentShape.MoveRight();
+        //        return true;
+        //    }
 
-            //Capture Space key
-            if (keyData == Keys.Space)
-            {
-                if (!_isGameOver)
-                {
-                    if (_currentShape == null)
-                    {
-                        //Game hasn't been started yet, start it
-                        GameStart();
-                    }
-                    else
-                    {
-                        _currentShape.Rotate();
-                    }
-                }
+        //    //Capture Space key
+        //    if (keyData == Keys.Space)
+        //    {
+        //        if (!_isGameOver)
+        //        {
+        //            if (_currentShape == null)
+        //            {
+        //                //Game hasn't been started yet, start it
+        //                GameStart();
+        //            }
+        //            else
+        //            {
+        //                _currentShape.Rotate();
+        //            }
+        //        }
 
-                return true;
-            }
+        //        return true;
+        //    }
 
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
+        //    return base.ProcessCmdKey(ref msg, keyData);
+        //}
 
         /// <summary>
         /// Method that fires up when user closes the ComboBoxCellType
@@ -350,6 +400,11 @@ namespace TetrisGame
             }
         }
 
+        /// <summary>
+        /// Capture cell click event to not allow user to select any cells
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void fpSpread1_CellClick(object sender, CellClickEventArgs e)
         {
             if ((e.Row == 3 && e.Column == 3) || (e.Column == 1 && e.Row == 1))
@@ -362,6 +417,11 @@ namespace TetrisGame
             }
         }
 
+        /// <summary>
+        /// Capture cell double click event to not allow user to go into edit mode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void fpSpread1_CellDoubleClick(object sender, CellClickEventArgs e)
         {
             e.Cancel = true;
