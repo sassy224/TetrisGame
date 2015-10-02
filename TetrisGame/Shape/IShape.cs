@@ -138,6 +138,24 @@ namespace TetrisGame.Shape
             ICellType nextCellType3 = null;
             ICellType nextCellType4 = null;
 
+            //Work around to fix a bug where the shape direction doesn't match the location of the cells
+            if (_currentShapeDirection == ShapeDirections.FaceDown || _currentShapeDirection == ShapeDirections.FaceUp)
+            {
+                if (_left == null || _right == null)
+                {
+                    _currentShapeDirection = ShapeDirections.FaceLeft;
+                    nextShape = ShapeDirections.FaceDown;
+                }
+            }
+            else
+            {
+                if (_top == null || _bottom == null)
+                {
+                    _currentShapeDirection = ShapeDirections.FaceDown;
+                    nextShape = ShapeDirections.FaceLeft;
+                }
+            }
+
             switch (nextShape)
             {
                 case ShapeDirections.FaceDown:
@@ -244,10 +262,37 @@ namespace TetrisGame.Shape
             ICellType nextCellType2 = null;
             ICellType nextCellType3 = null;
 
+            //Work around to fix a bug where the shape direction doesn't match the location of the cells
+            if (_currentShapeDirection == ShapeDirections.FaceDown || _currentShapeDirection == ShapeDirections.FaceUp)
+            {
+                if (_left == null || _right == null)
+                {
+                    _currentShapeDirection = ShapeDirections.FaceLeft;
+                }
+            }
+            else
+            {
+                if (_top == null || _bottom == null)
+                {
+                    _currentShapeDirection = ShapeDirections.FaceDown;
+                }
+            }
+
             //Compute the original locations
             switch (_currentShapeDirection)
             {
                 case ShapeDirections.FaceDown:
+                    loc1ColIdx = _leftColIdx;
+                    loc1RowIdx = _leftRowIdx;
+
+                    loc2ColIdx = _centerColIdx;
+                    loc2RowIdx = _centerRowIdx;
+
+                    loc3ColIdx = _rightColIdx;
+                    loc3RowIdx = _rightRowIdx;
+
+                    break;
+
                 case ShapeDirections.FaceUp:
                     loc1ColIdx = _leftColIdx;
                     loc1RowIdx = _leftRowIdx;
@@ -261,6 +306,17 @@ namespace TetrisGame.Shape
                     break;
 
                 case ShapeDirections.FaceLeft:
+                    loc1ColIdx = _topColIdx;
+                    loc1RowIdx = _topRowIdx;
+
+                    loc2ColIdx = _centerColIdx;
+                    loc2RowIdx = _centerRowIdx;
+
+                    loc3ColIdx = _bottomColIdx;
+                    loc3RowIdx = _bottomRowIdx;
+
+                    break;
+
                 case ShapeDirections.FaceRight:
                     loc1ColIdx = _topColIdx;
                     loc1RowIdx = _topRowIdx;
@@ -309,6 +365,30 @@ namespace TetrisGame.Shape
             switch (_currentShapeDirection)
             {
                 case ShapeDirections.FaceDown:
+                    switch (nextDirection)
+                    {
+                        case MovingDirections.Down:
+                            //Shape is facing down/up and moving down
+                            if (nextCellType2 != null || nextCellType3 != null || nextCellType1 != null)
+                                return false;
+                            break;
+
+                        case MovingDirections.Left:
+                            //Shape is facing down/up and moving left
+                            if (nextCellType1 != null)
+                                return false;
+                            break;
+
+                        case MovingDirections.Right:
+                            //Shape is facing down/up and moving right
+
+                            if (nextCellType3 != null)
+                                return false;
+                            break;
+                    }
+
+                    break;
+
                 case ShapeDirections.FaceUp:
                     switch (nextDirection)
                     {
@@ -335,6 +415,26 @@ namespace TetrisGame.Shape
                     break;
 
                 case ShapeDirections.FaceRight:
+                    switch (nextDirection)
+                    {
+                        case MovingDirections.Down:
+                            if (nextCellType3 != null)
+                                return false;
+                            break;
+
+                        case MovingDirections.Left:
+                            if (nextCellType1 != null || nextCellType2 != null || nextCellType3 != null)
+                                return false;
+                            break;
+
+                        case MovingDirections.Right:
+                            //Shape is facing right and moving right
+                            if (nextCellType1 != null || nextCellType2 != null || nextCellType3 != null)
+                                return false;
+                            break;
+                    }
+                    break;
+
                 case ShapeDirections.FaceLeft:
                     switch (nextDirection)
                     {
