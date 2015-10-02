@@ -69,6 +69,8 @@
     <Compile Include="Shape\BaseShape.cs" />
     <Compile Include="Shape\ITetrisShape.cs" />
     <Compile Include="Shape\DotShape.cs" />
+    <Compile Include="Shape\IShape.cs" />
+    <Compile Include="Shape\ZShape.cs" />
     <Compile Include="Shape\SShape.cs" />
     <Compile Include="Shape\LShape.cs" />
     <Compile Include="Shape\TShape.cs" />

@@ -8,14 +8,14 @@ using TetrisGame.Enums;
 
 namespace TetrisGame.Shape
 {
-    public class LShape : BaseShape
+    public class ZShape : BaseShape
     {
         /// <summary>
         /// Flag to determine whether the L part is on the left or on the right
         /// </summary>
         private bool _isLeft = false;
 
-        public LShape(SheetView sheet, int rowIdx, int colIdx, ShapeDirections direction, bool isLeft)
+        public ZShape(SheetView sheet, int rowIdx, int colIdx, ShapeDirections direction, bool isLeft)
             : base(sheet, rowIdx, colIdx)
         {
             _currentShapeDirection = direction;
@@ -27,9 +27,9 @@ namespace TetrisGame.Shape
         private void Initialize()
         {
             //The default shape is
-            //x  or  x
-            //x      x
-            //xx    xx
+            //   or
+            //xx      xx
+            // xx    xx
 
             //Center cell
             _centerColIdx = _initColIdx;
@@ -50,90 +50,115 @@ namespace TetrisGame.Shape
             //Compute locations for other cells
             if (_currentShapeDirection == ShapeDirections.FaceUp)
             {
-                //  x or x
-                //xxx    xxx
-
-                _leftColIdx = _centerColIdx - 1;
-                _leftRowIdx = _centerRowIdx;
-
-                _rightColIdx = _centerColIdx + 1;
-                _rightRowIdx = _centerRowIdx;
+                //xx    or   xx
+                // xx       xx
+                //
 
                 if (_isLeft)
                 {
-                    _topLeftColIdx = _leftColIdx;
-                    _topLeftRowIdx = _leftRowIdx - 1;
+                    _topColIdx = _centerColIdx;
+                    _topRowIdx = _centerRowIdx - 1;
+
+                    _topLeftColIdx = _topColIdx - 1;
+                    _topLeftRowIdx = _topRowIdx;
+
+                    _rightColIdx = _centerColIdx + 1;
+                    _rightRowIdx = _centerRowIdx;
                 }
                 else
                 {
-                    _topRightColIdx = _rightColIdx;
-                    _topRightRowIdx = _rightRowIdx - 1;
+                    _topColIdx = _centerColIdx;
+                    _topRowIdx = _centerRowIdx - 1;
+
+                    _topRightColIdx = _topColIdx + 1;
+                    _topRightRowIdx = _topRowIdx;
+
+                    _leftColIdx = _centerColIdx - 1;
+                    _leftRowIdx = _centerRowIdx;
                 }
             }
             else if (_currentShapeDirection == ShapeDirections.FaceRight)
             {
-                //x  or  xx
-                //x      x
-                //xx     x
-
-                _topColIdx = _centerColIdx;
-                _topRowIdx = _centerRowIdx - 1;
-
-                _bottomColIdx = _centerColIdx;
-                _bottomRowIdx = _centerRowIdx + 1;
-
+                //  x  or   x
+                // xx       xx
+                // x         x
                 if (_isLeft)
                 {
-                    _topRightColIdx = _topColIdx + 1;
-                    _topRightRowIdx = _topRowIdx;
+                    _rightColIdx = _centerColIdx + 1;
+                    _rightRowIdx = _centerRowIdx;
+
+                    _topRightColIdx = _rightColIdx;
+                    _topRightRowIdx = _rightRowIdx - 1;
+
+                    _bottomColIdx = _centerColIdx;
+                    _bottomRowIdx = _centerRowIdx + 1;
                 }
                 else
                 {
-                    _bottomRightColIdx = _bottomColIdx + 1;
-                    _bottomRightRowIdx = _bottomRowIdx;
+                    _topColIdx = _centerColIdx;
+                    _topRowIdx = _centerRowIdx - 1;
+
+                    _rightColIdx = _centerColIdx + 1;
+                    _rightRowIdx = _centerRowIdx;
+
+                    _bottomRightColIdx = _rightColIdx;
+                    _bottomRightRowIdx = _rightRowIdx + 1;
                 }
             }
             else if (_currentShapeDirection == ShapeDirections.FaceDown)
             {
-                //xxx or xxx
-                //x        x
-                _leftColIdx = _centerColIdx - 1;
-                _leftRowIdx = _centerRowIdx;
-
-                _rightColIdx = _centerColIdx + 1;
-                _rightRowIdx = _centerRowIdx;
-
+                //     or
+                //xx        xx
+                // xx      xx
                 if (_isLeft)
                 {
-                    _bottomRightColIdx = _rightColIdx;
-                    _bottomRightRowIdx = _rightRowIdx + 1;
+                    _leftColIdx = _centerColIdx - 1;
+                    _leftRowIdx = _centerRowIdx;
+
+                    _bottomColIdx = _centerColIdx;
+                    _bottomRowIdx = _centerRowIdx + 1;
+
+                    _bottomRightColIdx = _bottomColIdx + 1;
+                    _bottomRightRowIdx = _bottomRowIdx;
                 }
                 else
                 {
-                    _bottomLeftColIdx = _leftColIdx;
-                    _bottomLeftRowIdx = _leftRowIdx + 1;
+                    _rightColIdx = _centerColIdx + 1;
+                    _rightRowIdx = _centerRowIdx;
+
+                    _bottomColIdx = _centerColIdx;
+                    _bottomRowIdx = _centerRowIdx + 1;
+
+                    _bottomLeftColIdx = _bottomColIdx - 1;
+                    _bottomLeftRowIdx = _bottomRowIdx;
                 }
             }
             else //Face left
             {
-                //xx or  x
-                // x     x
-                // x    xx
-                _topColIdx = _centerColIdx;
-                _topRowIdx = _centerRowIdx - 1;
-
-                _bottomColIdx = _centerColIdx;
-                _bottomRowIdx = _centerRowIdx + 1;
-
+                // x  or   x
+                //xx       xx
+                //x         x
                 if (_isLeft)
                 {
-                    _bottomLeftColIdx = _bottomColIdx - 1;
-                    _bottomLeftRowIdx = _bottomRowIdx;
+                    _topColIdx = _centerColIdx;
+                    _topRowIdx = _centerRowIdx - 1;
+
+                    _leftColIdx = _centerColIdx - 1;
+                    _leftRowIdx = _centerRowIdx;
+
+                    _bottomLeftColIdx = _leftColIdx;
+                    _bottomLeftRowIdx = _leftRowIdx + 1;
                 }
                 else
                 {
-                    _topLeftColIdx = _topColIdx - 1;
-                    _topLeftRowIdx = _topRowIdx;
+                    _leftColIdx = _centerColIdx - 1;
+                    _leftRowIdx = _centerRowIdx;
+
+                    _topLeftColIdx = _leftColIdx;
+                    _topLeftRowIdx = _leftRowIdx - 1;
+
+                    _bottomColIdx = _centerColIdx;
+                    _bottomRowIdx = _centerRowIdx + 1;
                 }
             }
         }
@@ -195,15 +220,15 @@ namespace TetrisGame.Shape
         public override bool CanRotate(ShapeDirections nextShape)
         {
             //Consider the default shape
-            // x0             0x0
-            //0x0             0x0
-            //0xx (right) and xx (left)
+            //00          or0
+            //xx            0xx
+            //0xx (left)    xx0   (right)
 
-            //The shape can be rotated if there's no ButtonCellType in its (current top right, current right, current left
-            //and current bottom left cells) or (current top right, current right, current left and current top left cells)
-            //or 4 locations
+            //The shape can be rotated if there's no ButtonCellType in its (current top left, current top, current bottom left
+            //cells) or (current top left, current left, current bottom right cells)
+            //or 3 locations
 
-            //The order of 4 locations will be from left to right, top to bottom
+            //The order of 3 locations will be from left to right, top to bottom
             int loc1ColIdx = 0;
             int loc1RowIdx = 0;
 
@@ -213,13 +238,9 @@ namespace TetrisGame.Shape
             int loc3RowIdx = 0;
             int loc3ColIdx = 0;
 
-            int loc4ColIdx = 0;
-            int loc4RowIdx = 0;
-
             ICellType nextCellType1 = null;
             ICellType nextCellType2 = null;
             ICellType nextCellType3 = null;
-            ICellType nextCellType4 = null;
 
             switch (nextShape)
             {
@@ -231,14 +252,11 @@ namespace TetrisGame.Shape
                         loc1ColIdx = _centerColIdx - 1;
                         loc1RowIdx = _centerRowIdx;
 
-                        loc2ColIdx = _centerColIdx + 1;
-                        loc2RowIdx = _centerRowIdx;
+                        loc2ColIdx = _bottomColIdx - 1;
+                        loc2RowIdx = _bottomRowIdx;
 
-                        loc3ColIdx = _bottomColIdx - 1;
+                        loc3ColIdx = _bottomColIdx + 1;
                         loc3RowIdx = _bottomRowIdx;
-
-                        loc4ColIdx = _bottomColIdx + 1;
-                        loc4RowIdx = _bottomRowIdx;
                     }
                     else
                     {
@@ -246,13 +264,10 @@ namespace TetrisGame.Shape
                         loc1RowIdx = _topRowIdx;
 
                         loc2ColIdx = _centerColIdx - 1;
-                        loc2RowIdx = _centerRowIdx;
+                        loc2RowIdx = _centerRowIdx + 1;
 
-                        loc3ColIdx = _centerColIdx + 1;
-                        loc3RowIdx = _centerRowIdx;
-
-                        loc4ColIdx = _bottomColIdx - 1;
-                        loc4RowIdx = _bottomRowIdx;
+                        loc3ColIdx = _centerColIdx;
+                        loc3RowIdx = _centerRowIdx + 1;
                     }
 
                     break;
@@ -269,23 +284,17 @@ namespace TetrisGame.Shape
 
                         loc3ColIdx = _leftColIdx;
                         loc3RowIdx = _leftRowIdx + 1;
-
-                        loc4ColIdx = _centerColIdx;
-                        loc4RowIdx = _centerRowIdx + 1;
                     }
                     else
                     {
-                        loc1ColIdx = _leftColIdx;
-                        loc1RowIdx = _leftRowIdx - 1;
+                        loc1ColIdx = _centerColIdx - 1;
+                        loc1ColIdx = _centerRowIdx - 1;
 
-                        loc2ColIdx = _centerColIdx;
-                        loc2RowIdx = _centerRowIdx - 1;
+                        loc2ColIdx = _centerColIdx - 1;
+                        loc2RowIdx = _centerRowIdx;
 
-                        loc3ColIdx = _centerColIdx;
-                        loc3RowIdx = _centerRowIdx + 1;
-
-                        loc4ColIdx = _rightColIdx;
-                        loc4RowIdx = _rightRowIdx + 1;
+                        loc3ColIdx = _rightColIdx;
+                        loc3RowIdx = _rightRowIdx + 1;
                     }
                     break;
 
@@ -299,25 +308,19 @@ namespace TetrisGame.Shape
                         loc2ColIdx = _topColIdx + 1;
                         loc2RowIdx = _topRowIdx;
 
-                        loc3ColIdx = _centerColIdx - 1;
+                        loc3ColIdx = _centerColIdx + 1;
                         loc3RowIdx = _centerRowIdx;
-
-                        loc4ColIdx = _centerColIdx + 1;
-                        loc4RowIdx = _centerRowIdx;
                     }
                     else
                     {
-                        loc1ColIdx = _topColIdx + 1;
-                        loc1RowIdx = _topRowIdx;
+                        loc1ColIdx = _centerColIdx;
+                        loc1RowIdx = _centerRowIdx - 1;
 
-                        loc2ColIdx = _centerColIdx - 1;
-                        loc2RowIdx = _centerRowIdx;
+                        loc2ColIdx = loc1ColIdx + 1;
+                        loc2RowIdx = loc1RowIdx;
 
-                        loc3ColIdx = _centerColIdx + 1;
-                        loc3RowIdx = _centerRowIdx;
-
-                        loc4ColIdx = _bottomColIdx - 1;
-                        loc4RowIdx = _bottomRowIdx;
+                        loc3ColIdx = _leftColIdx;
+                        loc3RowIdx = _leftRowIdx + 1;
                     }
                     break;
 
@@ -325,31 +328,25 @@ namespace TetrisGame.Shape
                     //Current is FaceUp
                     if (_isLeft)
                     {
-                        loc1ColIdx = _centerColIdx;
-                        loc1RowIdx = _centerRowIdx - 1;
+                        loc1ColIdx = _topColIdx + 1;
+                        loc1RowIdx = _topRowIdx;
 
-                        loc2ColIdx = _rightColIdx;
-                        loc2RowIdx = _rightRowIdx - 1;
+                        loc2ColIdx = _centerColIdx;
+                        loc2RowIdx = _centerRowIdx + 1;
 
-                        loc3ColIdx = _centerColIdx;
-                        loc3RowIdx = _centerRowIdx + 1;
-
-                        loc4ColIdx = _rightColIdx;
-                        loc4RowIdx = _rightRowIdx + 1;
+                        loc3ColIdx = _rightColIdx;
+                        loc3RowIdx = _rightRowIdx + 1;
                     }
                     else
                     {
-                        loc1ColIdx = _leftColIdx;
-                        loc1RowIdx = _leftRowIdx - 1;
+                        loc1ColIdx = _topColIdx - 1;
+                        loc1RowIdx = _topRowIdx;
 
-                        loc2ColIdx = _centerColIdx;
-                        loc2RowIdx = _centerRowIdx - 1;
+                        loc2ColIdx = _centerColIdx + 1;
+                        loc2RowIdx = _centerRowIdx;
 
-                        loc3ColIdx = _centerColIdx;
-                        loc3RowIdx = _centerRowIdx + 1;
-
-                        loc4ColIdx = _rightColIdx;
-                        loc4RowIdx = _rightRowIdx + 1;
+                        loc3ColIdx = loc2ColIdx;
+                        loc3RowIdx = loc2RowIdx + 1;
                     }
                     break;
             }
@@ -358,12 +355,16 @@ namespace TetrisGame.Shape
             if (_centerColIdx == BORDER_LEFT || _centerColIdx == BORDER_RIGHT - 1 || _centerRowIdx == BORDER_BOTTOM - 1)
                 return false;
 
+            if (loc1ColIdx < BORDER_LEFT || loc2ColIdx < BORDER_LEFT || loc3ColIdx < BORDER_LEFT
+                || loc1ColIdx >= BORDER_RIGHT || loc2ColIdx >= BORDER_RIGHT || loc3ColIdx >= BORDER_RIGHT
+                || loc1RowIdx >= BORDER_BOTTOM || loc2RowIdx >= BORDER_BOTTOM || loc3RowIdx >= BORDER_BOTTOM)
+                return false;
+
             nextCellType1 = _sheet.Cells[loc1RowIdx, loc1ColIdx].CellType;
             nextCellType2 = _sheet.Cells[loc2RowIdx, loc2ColIdx].CellType;
             nextCellType3 = _sheet.Cells[loc3RowIdx, loc3ColIdx].CellType;
-            nextCellType4 = _sheet.Cells[loc4RowIdx, loc4ColIdx].CellType;
 
-            if (nextCellType1 != null || nextCellType2 != null || nextCellType3 != null || nextCellType4 != null)
+            if (nextCellType1 != null || nextCellType2 != null || nextCellType3 != null)
                 return false;
 
             return true;
@@ -405,25 +406,25 @@ namespace TetrisGame.Shape
                         loc2ColIdx = _centerColIdx;
                         loc2RowIdx = _centerRowIdx;
 
-                        loc3ColIdx = _rightColIdx;
-                        loc3RowIdx = _rightRowIdx;
+                        loc3ColIdx = _bottomColIdx;
+                        loc3RowIdx = _bottomRowIdx;
 
                         loc4ColIdx = _bottomRightColIdx;
                         loc4RowIdx = _bottomRightRowIdx;
                     }
                     else
                     {
-                        loc1ColIdx = _leftColIdx;
-                        loc1RowIdx = _leftRowIdx;
+                        loc1ColIdx = _centerColIdx;
+                        loc1RowIdx = _centerRowIdx;
 
-                        loc2ColIdx = _centerColIdx;
-                        loc2RowIdx = _centerRowIdx;
+                        loc2ColIdx = _rightColIdx;
+                        loc2RowIdx = _rightRowIdx;
 
-                        loc3ColIdx = _rightColIdx;
-                        loc3RowIdx = _rightRowIdx;
+                        loc3ColIdx = _bottomLeftColIdx;
+                        loc3RowIdx = _bottomLeftRowIdx;
 
-                        loc4ColIdx = _bottomLeftColIdx;
-                        loc4RowIdx = _bottomLeftRowIdx;
+                        loc4ColIdx = _bottomColIdx;
+                        loc4RowIdx = _bottomRowIdx;
                     }
 
                     break;
@@ -434,22 +435,22 @@ namespace TetrisGame.Shape
                         loc1ColIdx = _topColIdx;
                         loc1RowIdx = _topRowIdx;
 
-                        loc2ColIdx = _centerColIdx;
-                        loc2RowIdx = _centerRowIdx;
+                        loc2ColIdx = _leftColIdx;
+                        loc2RowIdx = _leftRowIdx;
 
-                        loc3ColIdx = _bottomLeftColIdx;
-                        loc3RowIdx = _bottomLeftRowIdx;
+                        loc3ColIdx = _centerColIdx;
+                        loc3RowIdx = _centerRowIdx;
 
-                        loc4ColIdx = _bottomColIdx;
-                        loc4RowIdx = _bottomRowIdx;
+                        loc4ColIdx = _bottomLeftColIdx;
+                        loc4RowIdx = _bottomLeftRowIdx;
                     }
                     else
                     {
                         loc1ColIdx = _topLeftColIdx;
                         loc1RowIdx = _topLeftRowIdx;
 
-                        loc2ColIdx = _topColIdx;
-                        loc2RowIdx = _topRowIdx;
+                        loc2ColIdx = _leftColIdx;
+                        loc2RowIdx = _leftRowIdx;
 
                         loc3ColIdx = _centerColIdx;
                         loc3RowIdx = _centerRowIdx;
@@ -462,14 +463,14 @@ namespace TetrisGame.Shape
                 case ShapeDirections.FaceRight:
                     if (_isLeft)
                     {
-                        loc1ColIdx = _topColIdx;
-                        loc1RowIdx = _topRowIdx;
+                        loc1ColIdx = _topRightColIdx;
+                        loc1RowIdx = _topRightRowIdx;
 
-                        loc2ColIdx = _topRightColIdx;
-                        loc2RowIdx = _topRightRowIdx;
+                        loc2ColIdx = _centerColIdx;
+                        loc2RowIdx = _centerRowIdx;
 
-                        loc3ColIdx = _centerColIdx;
-                        loc3RowIdx = _centerRowIdx;
+                        loc3ColIdx = _rightColIdx;
+                        loc3RowIdx = _rightRowIdx;
 
                         loc4ColIdx = _bottomColIdx;
                         loc4RowIdx = _bottomRowIdx;
@@ -482,8 +483,8 @@ namespace TetrisGame.Shape
                         loc2ColIdx = _centerColIdx;
                         loc2RowIdx = _centerRowIdx;
 
-                        loc3ColIdx = _bottomColIdx;
-                        loc3RowIdx = _bottomRowIdx;
+                        loc3ColIdx = _rightColIdx;
+                        loc3RowIdx = _rightRowIdx;
 
                         loc4ColIdx = _bottomRightColIdx;
                         loc4RowIdx = _bottomRightRowIdx;
@@ -496,8 +497,8 @@ namespace TetrisGame.Shape
                         loc1ColIdx = _topLeftColIdx;
                         loc1RowIdx = _topLeftRowIdx;
 
-                        loc2ColIdx = _leftColIdx;
-                        loc2RowIdx = _leftRowIdx;
+                        loc2ColIdx = _topColIdx;
+                        loc2RowIdx = _topRowIdx;
 
                         loc3ColIdx = _centerColIdx;
                         loc3RowIdx = _centerRowIdx;
@@ -507,17 +508,17 @@ namespace TetrisGame.Shape
                     }
                     else
                     {
-                        loc1ColIdx = _topRightColIdx;
-                        loc1RowIdx = _topRightRowIdx;
+                        loc1ColIdx = _topColIdx;
+                        loc1RowIdx = _topRowIdx;
 
-                        loc2ColIdx = _leftColIdx;
-                        loc2RowIdx = _leftRowIdx;
+                        loc2ColIdx = _topRightColIdx;
+                        loc2RowIdx = _topRightRowIdx;
 
-                        loc3ColIdx = _centerColIdx;
-                        loc3RowIdx = _centerRowIdx;
+                        loc3ColIdx = _leftColIdx;
+                        loc3RowIdx = _leftRowIdx;
 
-                        loc4ColIdx = _rightColIdx;
-                        loc4RowIdx = _rightRowIdx;
+                        loc4ColIdx = _centerColIdx;
+                        loc4RowIdx = _centerRowIdx;
                     }
                     break;
             }
@@ -567,7 +568,7 @@ namespace TetrisGame.Shape
                             //Shape is facing down and moving down
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType2 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
@@ -581,12 +582,12 @@ namespace TetrisGame.Shape
                             //Shape is facing down and moving left
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null)
                                     return false;
                             }
                             break;
@@ -595,12 +596,12 @@ namespace TetrisGame.Shape
                             //Shape is facing down and moving right
                             if (_isLeft)
                             {
-                                if (nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -620,7 +621,7 @@ namespace TetrisGame.Shape
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -629,12 +630,12 @@ namespace TetrisGame.Shape
                             //Shape is facing left and moving left
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType2 != null || nextCellType3 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -643,12 +644,12 @@ namespace TetrisGame.Shape
                             //Shape is facing left and moving right
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType2 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType2 != null || nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -662,12 +663,12 @@ namespace TetrisGame.Shape
                             //Shape is facing right and moving down
                             if (_isLeft)
                             {
-                                if (nextCellType2 != null || nextCellType4 != null)
+                                if (nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -676,12 +677,12 @@ namespace TetrisGame.Shape
                             //Shape is facing right and moving left
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType2 != null || nextCellType3 != null)
+                                if (nextCellType1 != null || nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -690,12 +691,12 @@ namespace TetrisGame.Shape
                             //Shape is facing right and moving right
                             if (_isLeft)
                             {
-                                if (nextCellType2 != null || nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType2 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;
@@ -709,7 +710,7 @@ namespace TetrisGame.Shape
                             //Shape is facing up and moving down
                             if (_isLeft)
                             {
-                                if (nextCellType2 != null || nextCellType3 != null || nextCellType4 != null)
+                                if (nextCellType1 != null || nextCellType3 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
@@ -723,12 +724,12 @@ namespace TetrisGame.Shape
                             //Shape is facing up and moving left
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType2 != null)
+                                if (nextCellType1 != null || nextCellType3 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType2 != null)
+                                if (nextCellType1 != null || nextCellType3 != null)
                                     return false;
                             }
                             break;
@@ -737,12 +738,12 @@ namespace TetrisGame.Shape
                             //Shape is facing up and moving right
                             if (_isLeft)
                             {
-                                if (nextCellType1 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             else
                             {
-                                if (nextCellType1 != null || nextCellType4 != null)
+                                if (nextCellType2 != null || nextCellType4 != null)
                                     return false;
                             }
                             break;

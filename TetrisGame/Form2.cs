@@ -40,7 +40,7 @@ namespace TetrisGame
         /// <summary>
         /// Variable to hold the current Shape model
         /// </summary>
-        private TetrisShapes _currentShapeModel = TetrisShapes.LShape;
+        private TetrisShapes _currentShapeModel = TetrisShapes.IShape;
         /// <summary>
         /// Variable to store the rectangle shape object of the spread
         /// </summary>
@@ -272,7 +272,7 @@ namespace TetrisGame
             if (forPreview)
             {
                 //Create a random shape
-                _currentShapeModel = (TetrisShapes)_random.Next(1, 5);
+                _currentShapeModel = (TetrisShapes)_random.Next(1, 7);
             }
 
             switch (_currentShapeModel)
@@ -291,6 +291,18 @@ namespace TetrisGame
 
                 case TetrisShapes.LShape:
                     shape = new LShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
+                    break;
+
+                case TetrisShapes.IShape:
+                    shape = new IShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
+                    break;
+
+                case TetrisShapes.ZShape:
+                    shape = new ZShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
+                    break;
+
+                default:
+                    shape = new TShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
                     break;
             }
 

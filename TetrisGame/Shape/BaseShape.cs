@@ -315,7 +315,7 @@ namespace TetrisGame.Shape
         /// <summary>
         /// Base function to reset all location variables except the center one
         /// </summary>
-        protected virtual void ResetLocations()
+        public virtual void ResetLocations()
         {
             _leftColIdx = -1;
             _leftRowIdx = -1;
