@@ -245,7 +245,7 @@ namespace TetrisGame
         /// <param name="shape"></param>
         /// <param name="colIdx"></param>
         /// <param name="rowIdx"></param>
-        private void CheckLocationOfNewShape(TetrisShapes shape, ShapeDirections direction, int colIdx, int rowIdx, bool isLeft)
+        private bool CheckLocationOfNewShape(TetrisShapes shape, ShapeDirections direction, int colIdx, int rowIdx, bool isLeft)
         {
             bool canDraw = true;
             Cell left = sheet1.Cells[rowIdx, colIdx - 1];
@@ -258,8 +258,7 @@ namespace TetrisGame
 
             if (center.CellType != null)
             {
-                GameOver();
-                return;
+                return false;
             }
 
             switch (shape)
@@ -486,10 +485,7 @@ namespace TetrisGame
                     break;
             }
 
-            if (!canDraw)
-            {
-                GameOver();
-            }
+            return canDraw;
         }
 
         /// <summary>
@@ -532,7 +528,8 @@ namespace TetrisGame
             //Check location of new shape before draw it. If it can't be drawn, game over
             if (!forPreview)
             {
-                CheckLocationOfNewShape(_currentShapeModel, _currentDirection, colIdx, rowIdx, _isLeft);
+                if (!CheckLocationOfNewShape(_currentShapeModel, _currentDirection, colIdx, rowIdx, _isLeft))
+                    GameOver();
             }
 
             switch (_currentShapeModel)
