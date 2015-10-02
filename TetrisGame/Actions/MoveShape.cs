@@ -32,21 +32,21 @@ namespace TetrisGame.Actions
                     case MovingDirections.Down:
                         if (_currentShape != null && _currentShape.CanMove(MovingDirections.Down))
                         {
-                            _currentShape.MoveDown();
+                            _currentShape.Move(MovingDirections.Down);
                         }
                         break;
 
                     case MovingDirections.Left:
                         if (_currentShape != null && _currentShape.CanMove(MovingDirections.Left))
                         {
-                            _currentShape.MoveLeft();
+                            _currentShape.Move(MovingDirections.Left);
                         }
                         break;
 
                     case MovingDirections.Right:
                         if (_currentShape != null && _currentShape.CanMove(MovingDirections.Right))
                         {
-                            _currentShape.MoveRight();
+                            _currentShape.Move(MovingDirections.Right);
                         }
                         break;
                 }

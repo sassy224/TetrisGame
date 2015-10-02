@@ -156,55 +156,46 @@ namespace TetrisGame.Shape
         /// <summary>
         /// Base move left function, move all cells coordinates to the left
         /// </summary>
-        public virtual void MoveLeft()
+        public virtual void Move(MovingDirections direction)
         {
-            if (_center != null) _centerColIdx -= 1;
-            if (_top != null) _topColIdx -= 1;
-            if (_bottom != null) _bottomColIdx -= 1;
-            if (_left != null) _leftColIdx -= 1;
-            if (_right != null) _rightColIdx -= 1;
-            if (_topLeft != null) _topLeftColIdx -= 1;
-            if (_bottomLeft != null) _bottomLeftColIdx -= 1;
-            if (_topRight != null) _topRightColIdx -= 1;
-            if (_bottomRight != null) _bottomRightColIdx -= 1;
+            switch (direction)
+            {
+                case MovingDirections.Left:
+                    if (_center != null) _centerColIdx -= 1;
+                    if (_top != null) _topColIdx -= 1;
+                    if (_bottom != null) _bottomColIdx -= 1;
+                    if (_left != null) _leftColIdx -= 1;
+                    if (_right != null) _rightColIdx -= 1;
+                    if (_topLeft != null) _topLeftColIdx -= 1;
+                    if (_bottomLeft != null) _bottomLeftColIdx -= 1;
+                    if (_topRight != null) _topRightColIdx -= 1;
+                    if (_bottomRight != null) _bottomRightColIdx -= 1;
+                    break;
 
-            ResetCells();
-            Draw();
-        }
+                case MovingDirections.Right:
+                    if (_center != null) _centerColIdx += 1;
+                    if (_top != null) _topColIdx += 1;
+                    if (_bottom != null) _bottomColIdx += 1;
+                    if (_left != null) _leftColIdx += 1;
+                    if (_right != null) _rightColIdx += 1;
+                    if (_topLeft != null) _topLeftColIdx += 1;
+                    if (_bottomLeft != null) _bottomLeftColIdx += 1;
+                    if (_topRight != null) _topRightColIdx += 1;
+                    if (_bottomRight != null) _bottomRightColIdx += 1;
+                    break;
 
-        /// <summary>
-        /// Base move right function, move all cells coordinates to the right
-        /// </summary>
-        public virtual void MoveRight()
-        {
-            if (_center != null) _centerColIdx += 1;
-            if (_top != null) _topColIdx += 1;
-            if (_bottom != null) _bottomColIdx += 1;
-            if (_left != null) _leftColIdx += 1;
-            if (_right != null) _rightColIdx += 1;
-            if (_topLeft != null) _topLeftColIdx += 1;
-            if (_bottomLeft != null) _bottomLeftColIdx += 1;
-            if (_topRight != null) _topRightColIdx += 1;
-            if (_bottomRight != null) _bottomRightColIdx += 1;
-
-            ResetCells();
-            Draw();
-        }
-
-        /// <summary>
-        /// Base move down function, move all cells coordinates down
-        /// </summary>
-        public virtual void MoveDown()
-        {
-            if (_center != null) _centerRowIdx += 1;
-            if (_top != null) _topRowIdx += 1;
-            if (_bottom != null) _bottomRowIdx += 1;
-            if (_left != null) _leftRowIdx += 1;
-            if (_right != null) _rightRowIdx += 1;
-            if (_topLeft != null) _topLeftRowIdx += 1;
-            if (_bottomLeft != null) _bottomLeftRowIdx += 1;
-            if (_topRight != null) _topRightRowIdx += 1;
-            if (_bottomRight != null) _bottomRightRowIdx += 1;
+                case MovingDirections.Down:
+                    if (_center != null) _centerRowIdx += 1;
+                    if (_top != null) _topRowIdx += 1;
+                    if (_bottom != null) _bottomRowIdx += 1;
+                    if (_left != null) _leftRowIdx += 1;
+                    if (_right != null) _rightRowIdx += 1;
+                    if (_topLeft != null) _topLeftRowIdx += 1;
+                    if (_bottomLeft != null) _bottomLeftRowIdx += 1;
+                    if (_topRight != null) _topRightRowIdx += 1;
+                    if (_bottomRight != null) _bottomRightRowIdx += 1;
+                    break;
+            }
 
             ResetCells();
             Draw();
@@ -445,6 +436,11 @@ namespace TetrisGame.Shape
             if (_bottom != null) max = Math.Max(_bottomRowIdx, max);
 
             return max;
+        }
+
+        public virtual ShapeDirections GetShapeDirection()
+        {
+            return _currentShapeDirection;
         }
     }
 }

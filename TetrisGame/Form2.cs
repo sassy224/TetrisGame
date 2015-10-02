@@ -70,15 +70,15 @@ namespace TetrisGame
             fpSpread1.SetCursor(FarPoint.Win.Spread.CursorType.Normal, System.Windows.Forms.Cursors.Default);
 
             //Set focus to button cell
-            fpSpread1_Sheet1.SetActiveCell(1, 1, true);
+            sheet1.SetActiveCell(1, 1, true);
 
             //Save the shape to object and remove it from the spread
-            _rectGameOver = fpSpread1_Sheet1.GetShape("rectGameOver");
-            fpSpread1_Sheet1.RemoveShape("rectGameOver");
+            _rectGameOver = sheet1.GetShape("rectGameOver");
+            sheet1.RemoveShape("rectGameOver");
 
             //Save ranges
-            _previewRange = fpSpread1_Sheet1.Cells[1, 16, 3, 19];
-            _gameRange = fpSpread1_Sheet1.Cells[5, 1, Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET, Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET];
+            _previewRange = sheet1.Cells[1, 16, 3, 19];
+            _gameRange = sheet1.Cells[5, 1, Constants.MAX_HEIGHT + Constants.BASE_HEIGHT_OFFSET, Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET];
             _currentLevel = GameLevels.Normal.ToString();
 
             MapCustomActions(true);
@@ -104,7 +104,7 @@ namespace TetrisGame
             if (_currentShape.CanMove(MovingDirections.Down))
             {
                 //Move the shape down
-                _currentShape.MoveDown();
+                _currentShape.Move(MovingDirections.Down);
             }
             else
             {
@@ -118,7 +118,8 @@ namespace TetrisGame
                     _currentShape = GenerateRandomShape(false);
 
                     //Create new pending shape
-                    _pendingShape.ResetCells();
+                    if (_pendingShape != null)
+                        _pendingShape.ResetCells();
                     _pendingShape = GenerateRandomShape(true);
 
                     //Remap action for new shape
@@ -136,7 +137,7 @@ namespace TetrisGame
             tmTick.Stop();
 
             //Remove shape
-            fpSpread1_Sheet1.RemoveShape("rectGameOver");
+            sheet1.RemoveShape("rectGameOver");
             //Clear ranges
             _previewRange.ResetCellType();
             _gameRange.ResetCellType();
@@ -145,7 +146,7 @@ namespace TetrisGame
             _currentShape = GenerateRandomShape(false);
 
             _pendingShape = GenerateRandomShape(true);
-            fpSpread1_Sheet1.Cells[2, 12].Text = "0";
+            sheet1.Cells[2, 12].Text = "0";
             _isGameOver = false;
 
             //Map custom action
@@ -161,7 +162,7 @@ namespace TetrisGame
         private void GameOver()
         {
             tmTick.Stop();
-            fpSpread1_Sheet1.AddShape(_rectGameOver);
+            sheet1.AddShape(_rectGameOver);
             _isGameOver = true;
 
             _currentShape = null;
@@ -194,13 +195,13 @@ namespace TetrisGame
 
             List<int> lstClearedRowIdxes = new List<int>();
 
-            for (int row = fpSpread1_Sheet1.RowCount - 1; row >= minRowIdx; row--)
+            for (int row = sheet1.RowCount - 1; row >= minRowIdx; row--)
             {
                 bool cleared = true;
                 for (int col = Constants.BASE_WIDTH_OFFSET; col < Constants.MAX_WIDTH + Constants.BASE_WIDTH_OFFSET; col++)
                 {
                     //If there's any row that is not of ButtonCellType, skip it
-                    if ((fpSpread1_Sheet1.Cells[row, col].CellType == null))
+                    if ((sheet1.Cells[row, col].CellType == null))
                     {
                         cleared = false;
                         break;
@@ -218,23 +219,276 @@ namespace TetrisGame
             foreach (int rowIdx in lstClearedRowIdxes)
             {
                 //Remove the row
-                fpSpread1_Sheet1.Rows.Get(rowIdx + removedCount).Remove();
+                sheet1.Rows.Get(rowIdx + removedCount).Remove();
                 //Add a new one at the top
-                fpSpread1_Sheet1.Rows.Add(Constants.BASE_HEIGHT_OFFSET, 1);
+                sheet1.Rows.Add(Constants.BASE_HEIGHT_OFFSET, 1);
 
                 //Update color for newly created cells
-                this.fpSpread1_Sheet1.Cells.Get(5, 0).BackColor = System.Drawing.SystemColors.ControlLight;
-                this.fpSpread1_Sheet1.Cells.Get(5, 0).ForeColor = System.Drawing.Color.Silver;
-                this.fpSpread1_Sheet1.Cells.Get(5, 0).VisualStyles = FarPoint.Win.VisualStyles.Off;
-                this.fpSpread1_Sheet1.Cells.Get(5, 19).BackColor = System.Drawing.SystemColors.ControlLight;
-                this.fpSpread1_Sheet1.Cells.Get(5, 19).ForeColor = System.Drawing.Color.Silver;
-                this.fpSpread1_Sheet1.Cells.Get(5, 19).VisualStyles = FarPoint.Win.VisualStyles.Off;
+                this.sheet1.Cells.Get(5, 0).BackColor = System.Drawing.SystemColors.ControlLight;
+                this.sheet1.Cells.Get(5, 0).ForeColor = System.Drawing.Color.Silver;
+                this.sheet1.Cells.Get(5, 0).VisualStyles = FarPoint.Win.VisualStyles.Off;
+                this.sheet1.Cells.Get(5, 19).BackColor = System.Drawing.SystemColors.ControlLight;
+                this.sheet1.Cells.Get(5, 19).ForeColor = System.Drawing.Color.Silver;
+                this.sheet1.Cells.Get(5, 19).VisualStyles = FarPoint.Win.VisualStyles.Off;
 
                 //Update score
-                fpSpread1_Sheet1.Cells[2, 12].Text = (Int32.Parse(fpSpread1_Sheet1.Cells[2, 12].Text) + 100).ToString();
+                sheet1.Cells[2, 12].Text = (Int32.Parse(sheet1.Cells[2, 12].Text) + 100).ToString();
 
                 //Increase the count so next row will be removed correctly
                 removedCount++;
+            }
+        }
+
+        /// <summary>
+        /// Check location of the new shape, if there's any obstacle, game over
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="colIdx"></param>
+        /// <param name="rowIdx"></param>
+        private void CheckLocationOfNewShape(TetrisShapes shape, ShapeDirections direction, int colIdx, int rowIdx, bool isLeft)
+        {
+            bool canDraw = true;
+            Cell left = sheet1.Cells[rowIdx, colIdx - 1];
+            Cell center = sheet1.Cells[rowIdx, colIdx];
+            Cell right = sheet1.Cells[rowIdx, colIdx + 1];
+
+            Cell bottom = sheet1.Cells[rowIdx + 1, colIdx];
+            Cell bottomLeft = sheet1.Cells[rowIdx + 1, colIdx - 1];
+            Cell bottomRight = sheet1.Cells[rowIdx + 1, colIdx + 1];
+
+            if (center.CellType != null)
+            {
+                GameOver();
+                return;
+            }
+
+            switch (shape)
+            {
+                case TetrisShapes.DotShape:
+                    //Already checked center
+                    break;
+
+                case TetrisShapes.IShape:
+                    switch (direction)
+                    {
+                        case ShapeDirections.FaceDown:
+                        case ShapeDirections.FaceUp:
+                            //x
+                            //x
+                            //x
+                            if (left.CellType != null || right.CellType != null)
+                                canDraw = false;
+
+                            break;
+
+                        case ShapeDirections.FaceLeft:
+                        case ShapeDirections.FaceRight:
+                            //xxx
+                            if (bottom.CellType != null)
+                                canDraw = false;
+
+                            break;
+                    }
+                    break;
+
+                case TetrisShapes.LShape:
+                    switch (direction)
+                    {
+                        case ShapeDirections.FaceDown:
+                            if (isLeft)
+                            {
+                                //xxx
+                                //  x
+                                if (left.CellType != null || bottomRight.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                ///xxx
+                                ///x
+                                if (left.CellType != null || bottomLeft.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+
+                        case ShapeDirections.FaceUp:
+                            //x    or  x
+                            //xxx    xxx
+                            if (left.CellType != null || right.CellType != null)
+                                canDraw = false;
+                            break;
+
+                        case ShapeDirections.FaceLeft:
+                            if (_isLeft)
+                            {
+                                // x
+                                // x
+                                //xx
+                                if (bottom.CellType != null || bottomLeft.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                //x
+                                //x
+                                //xx
+                                if (bottom.CellType != null || bottomRight.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+
+                        case ShapeDirections.FaceRight:
+                            if (_isLeft)
+                            {
+                                //xx
+                                //x
+                                //x
+                                if (bottom.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                //x
+                                //x
+                                //xx
+                                if (bottom.CellType != null || bottomRight.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+                    }
+                    break;
+
+                case TetrisShapes.SShape:
+                    //xx
+                    //xx
+                    if (bottom.CellType != null || bottomRight.CellType != null)
+                        canDraw = false;
+                    break;
+
+                case TetrisShapes.TShape:
+                    switch (direction)
+                    {
+                        case ShapeDirections.FaceDown:
+                            //xxx
+                            // x
+                            if (left.CellType != null || right.CellType != null || bottom.CellType != null)
+                                canDraw = false;
+
+                            break;
+
+                        case ShapeDirections.FaceUp:
+                            // x
+                            //xxx
+                            if (left.CellType != null || right.CellType != null)
+                                canDraw = false;
+
+                            break;
+
+                        case ShapeDirections.FaceLeft:
+                            // x
+                            //xx
+                            // x
+                            if (left.CellType != null || bottom.CellType != null)
+                                canDraw = false;
+
+                            break;
+
+                        case ShapeDirections.FaceRight:
+                            //x
+                            //xx
+                            //x
+                            if (right.CellType != null || bottom.CellType != null)
+                                canDraw = false;
+
+                            break;
+                    }
+                    break;
+
+                case TetrisShapes.ZShape:
+                    switch (direction)
+                    {
+                        case ShapeDirections.FaceDown:
+                            if (_isLeft)
+                            {
+                                //
+                                //xx
+                                // xx
+                                if (left.CellType != null || bottom.CellType != null || bottomLeft.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                //
+                                // xx
+                                //xx
+                                if (bottomLeft.CellType != null || bottom.CellType != null || right.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+
+                        case ShapeDirections.FaceUp:
+                            if (_isLeft)
+                            {
+                                //xx
+                                // xx
+                                //
+                                if (right.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                // xx
+                                //xx
+                                //
+                                if (left.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+
+                        case ShapeDirections.FaceLeft:
+                            if (_isLeft)
+                            {
+                                // x
+                                //xx
+                                //x
+                                if (bottomLeft.CellType != null || left.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                //x
+                                //xx
+                                // x
+                                if (right.CellType != null || bottomRight.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+
+                        case ShapeDirections.FaceRight:
+                            if (_isLeft)
+                            {
+                                // x
+                                //xx
+                                //x
+                                if (bottom.CellType != null || right.CellType != null)
+                                    canDraw = false;
+                            }
+                            else
+                            {
+                                //x
+                                //xx
+                                // x
+                                if (bottomRight.CellType != null || right.CellType != null)
+                                    canDraw = false;
+                            }
+                            break;
+                    }
+                    break;
+            }
+
+            if (!canDraw)
+            {
+                GameOver();
             }
         }
 
@@ -275,34 +529,40 @@ namespace TetrisGame
                 _currentShapeModel = (TetrisShapes)_random.Next(1, 7);
             }
 
+            //Check location of new shape before draw it. If it can't be drawn, game over
+            if (!forPreview)
+            {
+                CheckLocationOfNewShape(_currentShapeModel, _currentDirection, colIdx, rowIdx, _isLeft);
+            }
+
             switch (_currentShapeModel)
             {
                 case TetrisShapes.TShape:
-                    shape = new TShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
+                    shape = new TShape(sheet1, rowIdx, colIdx, _currentDirection);
                     break;
 
                 case TetrisShapes.SShape:
-                    shape = new SShape(fpSpread1_Sheet1, rowIdx, colIdx);
+                    shape = new SShape(sheet1, rowIdx, colIdx);
                     break;
 
                 case TetrisShapes.DotShape:
-                    shape = new DotShape(fpSpread1_Sheet1, rowIdx, colIdx);
+                    shape = new DotShape(sheet1, rowIdx, colIdx);
                     break;
 
                 case TetrisShapes.LShape:
-                    shape = new LShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
+                    shape = new LShape(sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
                     break;
 
                 case TetrisShapes.IShape:
-                    shape = new IShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
+                    shape = new IShape(sheet1, rowIdx, colIdx, _currentDirection);
                     break;
 
                 case TetrisShapes.ZShape:
-                    shape = new ZShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
+                    shape = new ZShape(sheet1, rowIdx, colIdx, _currentDirection, _isLeft);
                     break;
 
                 default:
-                    shape = new TShape(fpSpread1_Sheet1, rowIdx, colIdx, _currentDirection);
+                    shape = new TShape(sheet1, rowIdx, colIdx, _currentDirection);
                     break;
             }
 
@@ -412,7 +672,7 @@ namespace TetrisGame
             if (e.Row == 3 && e.Column == 3)
             {
                 //Check if user selected new value
-                string selectedLevel = fpSpread1_Sheet1.Cells[3, 3].Text;
+                string selectedLevel = sheet1.Cells[3, 3].Text;
                 if (selectedLevel != _currentLevel)
                 {
                     if (selectedLevel.Equals(GameLevels.Slow.ToString(), StringComparison.CurrentCultureIgnoreCase))

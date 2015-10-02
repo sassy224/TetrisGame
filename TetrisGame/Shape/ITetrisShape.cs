@@ -20,19 +20,9 @@ namespace TetrisGame.Shape
         void Rotate();
 
         /// <summary>
-        /// Interface method to move the shape to the left
+        /// Interface method to move the shape to a specific direction
         /// </summary>
-        void MoveLeft();
-
-        /// <summary>
-        /// Interface method to move the shape to the right
-        /// </summary>
-        void MoveRight();
-
-        /// <summary>
-        /// Interface method to move the shape down
-        /// </summary>
-        void MoveDown();
+        void Move(MovingDirections direction);
 
         /// <summary>
         /// Interface method to check if the shape can be rotated to the next shape direction
@@ -69,5 +59,10 @@ namespace TetrisGame.Shape
         /// Interface method to reset all locations in variables
         /// </summary>
         void ResetLocations();
+
+        /// <summary>
+        /// Interface method to get the current shape direction of the shape
+        /// </summary>
+        ShapeDirections GetShapeDirection();
     }
 }
