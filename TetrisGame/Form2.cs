@@ -614,6 +614,9 @@ namespace TetrisGame
 
         im.Put(new Keystroke(Keys.Space, Keys.None), "RotateShape");
         im.Put(new Keystroke(Keys.Space, Keys.Control), "RotateShape");
+
+        im.Put(new FarPoint.Win.Spread.Keystroke(Keys.F2, Keys.None), FarPoint.Win.Spread.SpreadActions.None);
+        im.Put(new FarPoint.Win.Spread.Keystroke(Keys.Tab, Keys.None), FarPoint.Win.Spread.SpreadActions.None);
       }
 
       if (_isPaused)
@@ -769,6 +772,29 @@ namespace TetrisGame
           _currentLevel = selectedLevel;
         }
       }
+    }
+
+    protected override void OnFormClosing(FormClosingEventArgs e)
+    {
+      tmTick.Stop();
+      MapCustomActions();
+
+      string message = "Are you sure that you would like to exit the game?";
+      string caption = "Exit game";
+      DialogResult result = MessageBox.Show(message, caption,
+                             MessageBoxButtons.YesNo,
+                             MessageBoxIcon.Question);
+      if (result == DialogResult.No)
+      {
+        e.Cancel = true;
+
+        tmTick.Start();
+        MapCustomActions();
+      }
+    }
+
+    public static void CloseCancel()
+    {
     }
   }
 }
