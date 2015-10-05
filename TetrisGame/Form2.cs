@@ -254,7 +254,7 @@ namespace TetrisGame
         this.sheet1.Cells.Get(5, 19).VisualStyles = FarPoint.Win.VisualStyles.Off;
 
         //Update score
-        sheet1.Cells[2, 10].Text = (Int32.Parse(sheet1.Cells[2, 12].Text) + 100).ToString();
+        sheet1.Cells[2, 10].Text = (Int32.Parse(sheet1.Cells[2, 10].Text) + 100).ToString();
 
         //Increase the count so next row will be removed correctly
         removedCount++;
