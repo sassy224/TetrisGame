@@ -32,13 +32,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FarPoint.CalcEngine, Version=4.0.3526.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457" />
-    <Reference Include="FarPoint.Excel, Version=4.0.3526.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457" />
-    <Reference Include="FarPoint.PDF, Version=4.0.3526.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457" />
-    <Reference Include="FarPoint.PluginCalendar.WinForms, Version=4.0.3526.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457" />
-    <Reference Include="FarPoint.Win, Version=4.0.3526.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457" />
-    <Reference Include="FarPoint.Win.Spread, Version=4.0.3526.2008, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.CalcEngine, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Excel, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Localization, Version=8.20.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.PDF, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.PluginCalendar.WinForms, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Chart, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Chart.Design, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Design, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Ink, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Spread, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Spread.Design, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="FarPoint.Win.Spread.Html, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="GrapeCity.Win.PluginInputMan, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
+    <Reference Include="policy.8.0.FarPoint.Win, Version=8.35.20151.0, Culture=neutral, PublicKeyToken=327c3516b1b18457, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.Web" />
@@ -53,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Actions\RotateShape.cs" />
     <Compile Include="Actions\MoveShape.cs" />
+    <Compile Include="Actions\PauseGame.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\MovingDirections.cs" />
     <Compile Include="Enums\ShapeDirections.cs" />
