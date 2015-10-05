@@ -169,6 +169,7 @@ namespace TetrisGame
       _pendingShape = GenerateRandomShape(true);
       sheet1.Cells[2, 12].Text = "0";
       _isGameOver = false;
+      _isPaused = false;
 
       //Map custom action
       MapCustomActions();
@@ -690,11 +691,17 @@ namespace TetrisGame
       e.Cancel = true;
     }
 
+    /// <summary>
+    /// Capture key down event
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void fpSpread1_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.N && (e.Modifiers == Keys.Control || e.Modifiers == Keys.Alt))
       {
         GameStart();
+        e.Handled = true;
       }
       else if (e.KeyCode == Keys.L && (e.Modifiers == Keys.Control || e.Modifiers == Keys.Alt))
       {
@@ -704,9 +711,13 @@ namespace TetrisGame
         Cell cboCell = sheet1.Cells[3, 3];
         //cboCell.Editor.StartEditing(null, false, false);
         cboCell.Editor.ShowSubEditor();
+
+        e.Handled = true;
       }
-      else if (e.KeyCode == Keys.P)
+      else if (e.KeyCode == Keys.P && (e.Modifiers == Keys.Control || e.Modifiers == Keys.Alt))
       {
+        fpSpread1.EditMode = false;
+
         if (_currentShape != null) //Game already started
         {
           if (_isPaused)
@@ -725,10 +736,16 @@ namespace TetrisGame
             _isPaused = true;
             MapCustomActions();
           }
+          e.Handled = true;
         }
       }
     }
 
+    /// <summary>
+    /// Handle combo select changes event
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void fpSpread1_ComboSelChange(object sender, EditorNotifyEventArgs e)
     {
       if (e.Row == 3 && e.Column == 3)

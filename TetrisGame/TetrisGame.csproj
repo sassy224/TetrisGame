@@ -63,7 +63,6 @@
   <ItemGroup>
     <Compile Include="Actions\RotateShape.cs" />
     <Compile Include="Actions\MoveShape.cs" />
-    <Compile Include="Actions\PauseGame.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\MovingDirections.cs" />
     <Compile Include="Enums\ShapeDirections.cs" />

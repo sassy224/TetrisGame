@@ -59,7 +59,7 @@
       this.fpSpread1.EnableCrossSheetReference = false;
       this.fpSpread1.HorizontalScrollBar.Buttons = new FarPoint.Win.Spread.FpScrollBarButtonCollection("");
       this.fpSpread1.HorizontalScrollBar.Name = "";
-      this.fpSpread1.HorizontalScrollBar.TabIndex = 4;
+      this.fpSpread1.HorizontalScrollBar.TabIndex = 6;
       this.fpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
       this.fpSpread1.Location = new System.Drawing.Point(0, 0);
       this.fpSpread1.Margin = new System.Windows.Forms.Padding(0);
@@ -75,7 +75,7 @@
       this.fpSpread1.TabStrip.ButtonPolicy = FarPoint.Win.Spread.TabStripButtonPolicy.Never;
       this.fpSpread1.VerticalScrollBar.Buttons = new FarPoint.Win.Spread.FpScrollBarButtonCollection("");
       this.fpSpread1.VerticalScrollBar.Name = "";
-      this.fpSpread1.VerticalScrollBar.TabIndex = 5;
+      this.fpSpread1.VerticalScrollBar.TabIndex = 7;
       this.fpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
       this.fpSpread1.CellClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSpread1_CellClick);
       this.fpSpread1.CellDoubleClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSpread1_CellDoubleClick);
@@ -288,6 +288,7 @@
       this.sheet1.Cells.Get(3, 2).ForeColor = System.Drawing.Color.Silver;
       this.sheet1.Cells.Get(3, 2).VisualStyles = FarPoint.Win.VisualStyles.Off;
       this.sheet1.Cells.Get(3, 3).BackColor = System.Drawing.Color.White;
+      comboBoxCellType1.AutoSearch = FarPoint.Win.AutoSearch.None;
       comboBoxCellType1.ButtonAlign = FarPoint.Win.ButtonAlign.Right;
       comboBoxCellType1.EditorValue = FarPoint.Win.Spread.CellType.EditorValue.ItemData;
       comboBoxCellType1.ItemData = new string[] {
