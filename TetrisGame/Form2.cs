@@ -122,6 +122,9 @@ namespace TetrisGame
 
     private void tmTick_Tick(object sender, EventArgs e)
     {
+      if (_currentShape == null)
+        return;
+
       if (_currentShape.CanMove(MovingDirections.Down))
       {
         //Move the shape down
