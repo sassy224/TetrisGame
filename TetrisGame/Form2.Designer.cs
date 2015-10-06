@@ -59,7 +59,7 @@
       this.fpSpread1.EnableCrossSheetReference = false;
       this.fpSpread1.HorizontalScrollBar.Buttons = new FarPoint.Win.Spread.FpScrollBarButtonCollection("");
       this.fpSpread1.HorizontalScrollBar.Name = "";
-      this.fpSpread1.HorizontalScrollBar.TabIndex = 6;
+      this.fpSpread1.HorizontalScrollBar.TabIndex = 8;
       this.fpSpread1.HorizontalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
       this.fpSpread1.Location = new System.Drawing.Point(0, 0);
       this.fpSpread1.Margin = new System.Windows.Forms.Padding(0);
@@ -75,7 +75,7 @@
       this.fpSpread1.TabStrip.ButtonPolicy = FarPoint.Win.Spread.TabStripButtonPolicy.Never;
       this.fpSpread1.VerticalScrollBar.Buttons = new FarPoint.Win.Spread.FpScrollBarButtonCollection("");
       this.fpSpread1.VerticalScrollBar.Name = "";
-      this.fpSpread1.VerticalScrollBar.TabIndex = 7;
+      this.fpSpread1.VerticalScrollBar.TabIndex = 9;
       this.fpSpread1.VerticalScrollBarPolicy = FarPoint.Win.Spread.ScrollBarPolicy.Never;
       this.fpSpread1.CellClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSpread1_CellClick);
       this.fpSpread1.CellDoubleClick += new FarPoint.Win.Spread.CellClickEventHandler(this.fpSpread1_CellDoubleClick);
@@ -253,7 +253,10 @@
       this.sheet1.Cells.Get(2, 10).HorizontalAlignment = FarPoint.Win.Spread.CellHorizontalAlignment.Left;
       this.sheet1.Cells.Get(2, 10).ParseFormatInfo = ((System.Globalization.NumberFormatInfo)(cultureInfo.NumberFormat.Clone()));
       ((System.Globalization.NumberFormatInfo)(this.sheet1.Cells.Get(2, 10).ParseFormatInfo)).NumberDecimalDigits = 0;
+      ((System.Globalization.NumberFormatInfo)(this.sheet1.Cells.Get(2, 10).ParseFormatInfo)).NumberGroupSizes = new int[] {
+        0};
       this.sheet1.Cells.Get(2, 10).ParseFormatString = "n";
+      this.sheet1.Cells.Get(2, 10).Value = 0;
       this.sheet1.Cells.Get(2, 10).VisualStyles = FarPoint.Win.VisualStyles.Off;
       this.sheet1.Cells.Get(2, 11).BackColor = System.Drawing.SystemColors.ControlLight;
       textCellType2.ReadOnly = true;

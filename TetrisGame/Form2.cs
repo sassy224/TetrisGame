@@ -617,6 +617,8 @@ namespace TetrisGame
 
         im.Put(new FarPoint.Win.Spread.Keystroke(Keys.F2, Keys.None), FarPoint.Win.Spread.SpreadActions.None);
         im.Put(new FarPoint.Win.Spread.Keystroke(Keys.Tab, Keys.None), FarPoint.Win.Spread.SpreadActions.None);
+        im.Put(new FarPoint.Win.Spread.Keystroke(Keys.End, Keys.None), FarPoint.Win.Spread.SpreadActions.None);
+        im.Put(new FarPoint.Win.Spread.Keystroke(Keys.PageDown, Keys.None), FarPoint.Win.Spread.SpreadActions.None);
       }
 
       if (_isPaused)
